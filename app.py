@@ -103,7 +103,7 @@ def getattractionId(attractionId):
 
 @app.route("/api/categories")
 def categorise():
-	data=["公共藝術","其　　他","單車行蹤","宗教信仰","戶外踏青","春季活動","歷史建築","藍色公路","藝文館所","親子共遊","養生溫泉"]
+	
 	try:
 		data=[]
 		mycursor.execute("select category from categories")
