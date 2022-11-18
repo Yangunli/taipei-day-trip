@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+    {%endblock%}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <title>{%block title%}Home{%endblock%}</title>
+  </head>
+  <body>
+    <div class="nav-container">
+      <nav>
+        <h2>台北一日遊</h2>
+        <div class="nav_link">
+          <a id="booking" href="/">預定行程</a>
+          <p id="member" href="">登入/註冊</p>
+        </div>
+      </nav>
+    </div>
+    <div class="login active">
+      <h2>登入會員帳號</h2>
+      <input type="email" name="email" placeholder="輸入電子郵件" />
+      <input type="password" name="password" placeholder="輸入密碼" />
+      <button>登入帳號</button>
+      <span id="register_link">還沒有帳戶？點此註冊</span>
+    </div>
+    <div class="register active">
+      <h2>註冊會員帳號</h2>
+      <input type="text" placeholder="輸入姓名" />
+      <input type="email" name="email" placeholder="輸入電子郵件" />
+      <input type="password" name="password" placeholder="輸入密碼" />
+      <button>註冊新帳號</button>
+      <span id="login_link">已經有帳戶了？點此登入</span>
+    </div>
+    <div class="overlay active"></div>
+    {% block content %} {% endblock %}
+  </body>
+</html>

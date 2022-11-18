@@ -1,0 +1,19 @@
+{% extends "base.html" %} {%block title%}台北一日遊 | 首頁 {%endblock%} {% block
+scripts %}
+<script
+  src="{{ url_for('static', filename='js/attraction.js') }}"
+  defer
+></script>
+{%endblock%} {% block content %}
+<main class="attraction_main">
+  <div class="carousel"></div>
+  <div class="attraction_info">
+    <div class="booking_title"></div>
+    <div class="booking_container"></div>
+  </div>
+</main>
+
+<div class="attraction_container"></div>
+<footer><p>COPYRIGHT © 2021 台北一日遊</p></footer>
+
+{% endblock %}
