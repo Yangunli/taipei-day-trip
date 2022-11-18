@@ -13,7 +13,7 @@ app.config["JSON_SORT_KEYS"]=False
 
 app.config["SECRET_KEY"]="eaf266f88f72894c90"
 
-cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 30, pool_reset_session=True ,user='root', password='thu982305',database='tpe_travel',host="127.0.0.1")
+cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 30, pool_reset_session=True ,user='root', password='thu982305',database='tpe_travel',host="0.0.0.0/0")
 connection = cnxpool.get_connection()
 mycursor=connection.cursor()
 
