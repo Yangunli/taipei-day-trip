@@ -82,7 +82,7 @@ overlayEl.addEventListener("click", () => {
 // search attraction
 let keyword = "";
 let currentPage = 0;
-let url = `http://127.0.0.1:3000/api/attractions?page=${currentPage}&keyword=${keyword}`;
+let url = `${originUrl}/api/attractions?page=${currentPage}&keyword=${keyword}`;
 
 const getAttractionList = async () => {
   await fetch(url)
@@ -132,7 +132,7 @@ searchBtn.addEventListener("click", () => {
     homeMainEl.removeChild(homeMainEl.lastElementChild);
   if (homeMainEl.children) {
     keyword = searchEl.value;
-    url = `http://127.0.0.1:3000/api/attractions?page=${currentPage}&keyword=${keyword}`;
+    url = `${originUrl}/api/attractions?page=${currentPage}&keyword=${keyword}`;
     getAttractionList();
   }
 });
@@ -144,7 +144,7 @@ window.addEventListener("scroll", () => {
 
   if (clientHeight + scrollTop >= scrollHeight - 5) {
     // show the loading animation
-    url = `http://127.0.0.1:3000/api/attractions?page=${
+    url = `${originUrl}/api/attractions?page=${
       currentPage + 1
     }&keyword=${keyword}`;
     getAttractionList();
