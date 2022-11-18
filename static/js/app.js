@@ -132,6 +132,7 @@ searchBtn.addEventListener("click", () => {
     homeMainEl.removeChild(homeMainEl.lastElementChild);
   if (homeMainEl.children) {
     keyword = searchEl.value;
+    currentPage = 0;
     url = `${originUrl}/api/attractions?page=${currentPage}&keyword=${keyword}`;
     getAttractionList();
   }
@@ -149,7 +150,5 @@ window.addEventListener("scroll", () => {
     }&keyword=${keyword}`;
     getAttractionList();
     currentPage++;
-  } else if (scrollTop < clientHeight) {
-    currentPage = 0;
   }
 });
