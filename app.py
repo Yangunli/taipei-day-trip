@@ -124,5 +124,6 @@ def categorise():
 	# except:
 	# 	result={"error":True,"message":"500 Internal Server Error"}  
 	# 	return result,500
-app.run(port=3000)
+if __name__ == "__main__":
+    app.run(port=3000,debug=True)
 
