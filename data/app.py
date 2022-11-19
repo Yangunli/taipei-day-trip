@@ -1,30 +1,37 @@
 import json
 import mysql.connector 
 
-mydb = mysql.connector.connect(user='root', password='thu982305',database='tpe_travel',host="127.0.0.1")
+mydb = mysql.connector.connect(user='root', password='thu982305',database='tpe_attraction',host="127.0.0.1")
 mycursor = mydb.cursor(buffered=True)
-
-
-
-
-# data=["公共藝術","其　　他","單車行蹤","宗教信仰","戶外踏青","春季活動","歷史建築","藍色公路","藝文館所","親子共遊","養生溫泉"]
-# for id, category in enumerate(data):
-#     category_id=id+1
-    
-#     try:
-#         mycursor.execute("insert into categories(id,category) values(%(category_id)s, %(category)s)", {"category_id":category_id, "category":category}) 
-#         mydb.commit()
-#         print("ok")
-#     except:
-#         print(category_id)
-
 
 with open('taipei-attractions.json',"r", encoding="utf-8") as file:
     data = json.load(file)
     
-
 for index, infos in data.items():
     cat=[]
+    attractions=infos["results"]
+    for attraction in attractions:
+        
+        if attraction["CAT"] == "其\u3000\u3000他":
+            category="其他"
+            if( category not in cat):
+                cat.append(category)
+        else:   
+            category=attraction["CAT"] 
+            if( category not in cat):
+                cat.append(category)
+
+    for id,item in enumerate(cat):
+        # print(id,item)
+        # try:
+        #     mycursor.execute("insert into categories(category) values(%(item)s)", {"item":item})
+        #     mydb.commit()
+        # except : 
+        #     print("error!!")
+
+
+for index, infos in data.items():
+    
     attractions=infos["results"]
     for attraction in attractions:
     
@@ -41,27 +48,24 @@ for index, infos in data.items():
         name=attraction["name"] 
         
         if (attraction["CAT"]=="其\u3000\u3000他"):
-            category_id="2"
-        elif(attraction["CAT"]=="公共藝術"):
-            category_id="1"
-        elif(attraction["CAT"]=="單車行蹤"):
-            category_id="3"
-        elif(attraction["CAT"]=="宗教信仰"):
-            category_id="4"
-        elif(attraction["CAT"]=="戶外踏青"):
-            category_id="5"
-        elif(attraction["CAT"]=="春季活動"):
-            category_id="6"
-        elif(attraction["CAT"]=="歷史建築"):
-            category_id="7"
-        elif(attraction["CAT"]=="藍色公路"):
             category_id="8"
-        elif(attraction["CAT"]=="藝文館所"):
-            category_id="9"
-        elif(attraction["CAT"]=="親子共遊"):
-            category_id="10"
         elif(attraction["CAT"]=="養生溫泉"):
-            category_id="11"
+            category_id="1"
+        elif(attraction["CAT"]=="藍色公路"):
+            category_id="2"
+        elif(attraction["CAT"]=="歷史建築"):
+            category_id="3"
+        elif(attraction["CAT"]=="藝文館所"):
+            category_id="4"
+        elif(attraction["CAT"]=="單車行蹤"):
+            category_id="5"
+        elif(attraction["CAT"]=="戶外踏青"):
+            category_id="6"
+        elif(attraction["CAT"]=="宗教信仰"):
+            category_id="7"
+        elif(attraction["CAT"]==""):
+            category_id="9"
+
         
 
         description=attraction["description"]

@@ -13,26 +13,36 @@ const loadBtn = document.createElement("button");
 loadBtn.setAttribute("class", "loadBtn");
 loadBtn.textContent = "Load More";
 
-const fetchCategories = async () => {
-  await fetch(`${originUrl}/api/categories`)
-    .then((response) => response.json())
-    .then(function (res) {
-      const data = res.data;
-      data.map((category) => {
-        const categoryEl = document.createElement("span");
-        categoryEl.setAttribute("class", "category");
-        categoryEl.textContent = category;
-        searchMenu.appendChild(categoryEl);
-        categoryEl.addEventListener("click", () => {
-          const categoryText = categoryEl.outerText;
-          searchEl.value = categoryText;
-        });
-      });
-    });
-};
-fetchCategories();
+let categoryList = [
+  "公共藝術",
+  "其　　他",
+  "單車行蹤",
+  "宗教信仰",
+  "戶外踏青",
+  "春季活動",
+  "歷史建築",
+  "藍色公路",
+  "藝文館所",
+  "親子共遊",
+  "養生溫泉",
+];
 
-console.log(homeMainEl);
+categoryList.map((category) => {
+  const categoryEl = document.createElement("span");
+  categoryEl.setAttribute("class", "category");
+  categoryEl.textContent = category;
+  searchMenu.appendChild(categoryEl);
+  categoryEl.addEventListener("click", () => {
+    const categoryText = categoryEl.outerText;
+    if (categoryEl.outerText == "其　　他") {
+      searchEl.value = "其他";
+    } else {
+      searchEl.value = categoryText;
+    }
+  });
+});
+
+// console.log(homeMainEl);
 
 searchEl.addEventListener("click", () => {
   searchMenu.classList.toggle("active");
