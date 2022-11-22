@@ -7,6 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
+    <meta name="description" content="資料為台北58個景點組成的旅遊網站" />
 
     {% block scripts %}
     <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
@@ -58,6 +59,7 @@
       <span id="login_link">已經有帳戶了？點此登入</span>
     </div>
     <div class="overlay active"></div>
+    <div class="transparent_overlay active"></div>
     {% block content %} {% endblock %}
   </body>
 </html>

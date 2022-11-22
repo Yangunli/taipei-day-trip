@@ -7,9 +7,10 @@ const registerEl = document.querySelector(".register");
 const loginClose = document.querySelector(".login_close");
 const registerClose = document.querySelector(".register_close");
 const overlayEl = document.querySelector(".overlay");
+const transparentOverlayEl = document.querySelector(".transparent_overlay");
 
 const searchEl = document.querySelector("#search");
-const searchMenu = document.querySelector(".search_menu.active");
+const searchMenu = document.querySelector(".search_menu");
 const homeMainEl = document.querySelector(".home_main");
 const searchBtn = document.querySelector("#search_btn");
 
@@ -28,6 +29,7 @@ const fetchCategories = async () => {
           searchEl.value = categoryText;
           searchMenu.classList.add("active");
           searchEl.classList.add("category_text");
+          transparentOverlayEl.classList.add("active");
         });
       });
     });
@@ -36,6 +38,7 @@ fetchCategories();
 
 searchEl.addEventListener("click", () => {
   searchMenu.classList.toggle("active");
+  transparentOverlayEl.classList.toggle("active");
 });
 
 // 會員系統邏輯
@@ -81,6 +84,11 @@ overlayEl.addEventListener("click", () => {
   overlayEl.classList.add("active");
   loginEl.classList.add("active");
   registerEl.classList.add("active");
+});
+
+transparentOverlayEl.addEventListener("click", () => {
+  transparentOverlayEl.classList.add("active");
+  searchMenu.classList.add("active");
 });
 
 // search attraction
@@ -132,21 +140,79 @@ const getAttractionList = async () => {
 
 getAttractionList();
 
-console.log(nextPage);
+// searchBtn.addEventListener("click", () => {
+//   while (homeMainEl.children.length >= 1) {
+//     homeMainEl.removeChild(homeMainEl.lastElementChild);
+//   }
 
-searchBtn.addEventListener("click", () => {
-  while (homeMainEl.children.length >= 1)
+//   keyword = searchEl.value;
+//   currentPage = 0;
+//   url = `${originUrl}/api/attractions?page=${currentPage}&keyword=${keyword}`;
+//   getAttractionList();
+
+//   console.log(searchEl.value);
+//   searchEl.value = "";
+// });
+
+const getKeyword = async () => {
+  while (homeMainEl.children.length >= 1) {
     homeMainEl.removeChild(homeMainEl.lastElementChild);
-  if (homeMainEl.children) {
-    keyword = searchEl.value;
-    currentPage = 0;
-    url = `${originUrl}/api/attractions?page=${currentPage}&keyword=${keyword}`;
-    getAttractionList();
-
-    console.log(searchEl.value);
-    searchEl.value = "";
   }
-});
+  keyword = searchEl.value;
+  currentPage = 0;
+  await fetch(
+    `${originUrl}/api/attractions?page=${currentPage}&keyword=${keyword}`
+  )
+    .then((response) => response.json())
+    .then(function (res) {
+      if (res.data) {
+        nextPage = res.nextPage;
+
+        const data = res?.data;
+        data?.map((attraction) => {
+          const cardEl = document.createElement("a");
+          cardEl.setAttribute("class", "card");
+          cardEl.setAttribute(
+            "href",
+            `${originUrl}/attraction/${attraction.id}`
+          );
+          cardEl.setAttribute("data-id", attraction.id);
+
+          const cardContentEl = document.createElement("div");
+          cardContentEl.setAttribute("class", "card_content");
+          cardContentEl.setAttribute(
+            "style",
+            `background-image: url(${attraction.images[0]});`
+          );
+
+          const cardTitle = document.createElement("div");
+          cardTitle.setAttribute("class", "card_title");
+          cardTitle.textContent = attraction.name;
+          cardContentEl.appendChild(cardTitle);
+
+          const cardInfoEl = document.createElement("div");
+          cardInfoEl.setAttribute("class", "card_info");
+          const mrtEl = document.createElement("span");
+          mrtEl.setAttribute("class", "mrt");
+          mrtEl.textContent = attraction.mrt;
+          cardInfoEl.appendChild(mrtEl);
+          const categoryEl = document.createElement("span");
+          categoryEl.textContent = attraction.category;
+          cardInfoEl.appendChild(categoryEl);
+          cardEl.appendChild(cardContentEl);
+          cardEl.appendChild(cardInfoEl);
+          homeMainEl.appendChild(cardEl);
+        });
+      } else {
+        console.log("查無此關鍵字");
+        const notfoundEl = document.createElement("div");
+        notfoundEl.setAttribute("class", "notfound ");
+        homeMainEl.appendChild(notfoundEl);
+      }
+    });
+
+  searchEl.value = "";
+};
 
 function showLoading() {
   // load more data
@@ -171,3 +237,22 @@ window.addEventListener("scroll", () => {
     }
   }
 });
+
+function debounce(fn, delay = 200) {
+  let timer;
+  return function () {
+    window.clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, arguments);
+      window.clearTimeout(timer);
+    }, delay);
+  };
+}
+
+// 进行函数防抖
+let debounced = debounce(function () {
+  console.log("debounce");
+});
+
+// 监听resize事件
+window.addEventListener("resize", debounced);
