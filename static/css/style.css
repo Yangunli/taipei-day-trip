@@ -43,7 +43,7 @@ button {
   height: 320px;
 }
 .header_container header {
-  width: min(90%, 1198px);
+  width: min(100% - 25px, 1200px);
   display: flex;
   position: relative;
   flex-direction: column;
@@ -186,6 +186,7 @@ footer {
 .register input {
   padding: 15px;
   border-radius: 5px;
+  border: 1px solid #cccccc;
 }
 .login button,
 .register button {
@@ -194,6 +195,7 @@ footer {
   border-radius: 5px;
   color: var(--white);
   font-size: 19px;
+  border: none;
 }
 
 .login {

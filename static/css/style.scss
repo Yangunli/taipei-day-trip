@@ -45,7 +45,7 @@ button {
   height: 320px;
 
   header {
-    width: min(90%, 1198px);
+    width: min(calc(100% - 25px), 1200px);
     display: flex;
     position: relative;
     flex-direction: column;
@@ -189,6 +189,7 @@ footer {
   input {
     padding: 15px;
     border-radius: 5px;
+    border: 1px solid #cccccc;
   }
   button {
     padding: 10px 20px;
@@ -196,6 +197,7 @@ footer {
     border-radius: 5px;
     color: var(--white);
     font-size: 19px;
+    border: none;
   }
 }
 
