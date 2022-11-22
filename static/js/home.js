@@ -140,20 +140,6 @@ const getAttractionList = async () => {
 
 getAttractionList();
 
-// searchBtn.addEventListener("click", () => {
-//   while (homeMainEl.children.length >= 1) {
-//     homeMainEl.removeChild(homeMainEl.lastElementChild);
-//   }
-
-//   keyword = searchEl.value;
-//   currentPage = 0;
-//   url = `${originUrl}/api/attractions?page=${currentPage}&keyword=${keyword}`;
-//   getAttractionList();
-
-//   console.log(searchEl.value);
-//   searchEl.value = "";
-// });
-
 const getKeyword = async () => {
   while (homeMainEl.children.length >= 1) {
     homeMainEl.removeChild(homeMainEl.lastElementChild);
@@ -216,7 +202,7 @@ const getKeyword = async () => {
 
 function showLoading() {
   // load more data
-  setTimeout(getAttractionList, 300);
+  setTimeout(getAttractionList, 250);
 }
 
 window.addEventListener("scroll", () => {
@@ -224,7 +210,7 @@ window.addEventListener("scroll", () => {
 
   // console.log({ scrollTop, scrollHeight, clientHeight });
   if (clientHeight + scrollTop >= scrollHeight - 5) {
-    // show the loading animation
+    // show the loading animation or not
 
     if (currentPage + 1 != nextPage) {
       return;

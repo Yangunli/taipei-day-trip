@@ -5,6 +5,7 @@
   box-sizing: auto;
   text-decoration: none;
   font-family: "Noto Sans TC", sans-serif;
+  scroll-behavior: smooth;
 }
 
 :root {
@@ -275,14 +276,19 @@ footer {
   background-size: cover;
 }
 .card .card_content .card_title {
+  display: flex;
+  align-items: center;
   position: absolute;
   bottom: 0;
+  width: calc(100% - 20px);
+  height: 20px;
   background-color: rgba(0, 0, 0, 0.6);
   left: 0;
   right: 0;
   color: var(--white);
   padding: 10px;
   font-weight: 700;
+  line-height: 15.3px;
 }
 .card .card_info {
   width: 100%;
@@ -363,6 +369,7 @@ footer {
   grid-template-columns: repeat(2, 1fr);
   overflow-x: scroll;
   scrollbar-width: thin;
+  margin-top: 54px;
   padding-top: 37px;
   padding-bottom: 37px;
   gap: 20px;

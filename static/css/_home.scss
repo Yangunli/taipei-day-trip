@@ -20,14 +20,19 @@
     background-position: center;
     background-size: cover;
     .card_title {
+      display: flex;
+      align-items: center;
       position: absolute;
       bottom: 0;
+      width: calc(100% - 20px);
+      height: 20px;
       background-color: rgba(0, 0, 0, 0.6);
       left: 0;
       right: 0;
       color: var(--white);
       padding: 10px;
       font-weight: 700;
+      line-height: 15.3px;
     }
   }
   .card_info {
