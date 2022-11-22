@@ -4,7 +4,8 @@ const registerLinkEl = document.querySelector("#register_link");
 const loginLinkEl = document.querySelector("#login_link");
 const registerEl = document.querySelector(".register");
 const overlayEl = document.querySelector(".overlay");
-
+const loginClose = document.querySelector(".login_close");
+const registerClose = document.querySelector(".register_close");
 // 會員系統邏輯
 
 memberEl.addEventListener(
@@ -33,6 +34,16 @@ loginLinkEl.addEventListener(
     registerEl.classList.add("active");
   }
 );
+
+loginClose.addEventListener("click", () => {
+  loginEl.classList.add("active");
+  overlayEl.classList.add("active");
+});
+
+registerClose.addEventListener("click", () => {
+  registerEl.classList.add("active");
+  overlayEl.classList.add("active");
+});
 
 overlayEl.addEventListener("click", () => {
   overlayEl.classList.add("active");

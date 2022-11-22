@@ -7,21 +7,21 @@ mycursor = mydb.cursor(buffered=True)
 with open('taipei-attractions.json',"r", encoding="utf-8") as file:
     data = json.load(file)
     
-for index, infos in data.items():
-    cat=[]
-    attractions=infos["results"]
-    for attraction in attractions:
+# for index, infos in data.items():
+#     cat=[]
+#     attractions=infos["results"]
+#     for attraction in attractions:
         
-        if attraction["CAT"] == "其\u3000\u3000他":
-            category="其他"
-            if( category not in cat):
-                cat.append(category)
-        else:   
-            category=attraction["CAT"] 
-            if( category not in cat):
-                cat.append(category)
+#         if attraction["CAT"] == "其\u3000\u3000他":
+#             category="其他"
+#             if( category not in cat):
+#                 cat.append(category)
+#         else:   
+#             category=attraction["CAT"] 
+#             if( category not in cat):
+#                 cat.append(category)
 
-    for id,item in enumerate(cat):
+#     for id,item in enumerate(cat):
         # print(id,item)
         # try:
         #     mycursor.execute("insert into categories(category) values(%(item)s)", {"item":item})
@@ -57,13 +57,13 @@ for index, infos in data.items():
             category_id="3"
         elif(attraction["CAT"]=="藝文館所"):
             category_id="4"
-        elif(attraction["CAT"]=="單車行蹤"):
+        elif(attraction["CAT"]=="單車遊蹤"):
             category_id="5"
         elif(attraction["CAT"]=="戶外踏青"):
             category_id="6"
         elif(attraction["CAT"]=="宗教信仰"):
             category_id="7"
-        elif(attraction["CAT"]==""):
+        elif(attraction["CAT"]=="親子共遊"):
             category_id="9"
 
         
