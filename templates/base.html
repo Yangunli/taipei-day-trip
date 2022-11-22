@@ -3,9 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+
     {% block scripts %}
-    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}" defer></script>
     {%endblock%}
     <link
       rel="stylesheet"
@@ -16,7 +20,7 @@
   <body>
     <div class="nav-container">
       <nav>
-        <h2>台北一日遊</h2>
+        <h2><a href="/">台北一日遊</a></h2>
         <div class="nav_link">
           <a id="booking" href="/">預定行程</a>
           <p id="member" href="">登入/註冊</p>
@@ -24,6 +28,7 @@
       </nav>
     </div>
     <div class="login active">
+      <img class="login_close" src="/static/images/close.png" alt="" />
       <h2>登入會員帳號</h2>
       <input type="email" name="email" placeholder="輸入電子郵件" />
       <input type="password" name="password" placeholder="輸入密碼" />
@@ -31,10 +36,24 @@
       <span id="register_link">還沒有帳戶？點此註冊</span>
     </div>
     <div class="register active">
+      <img class="register_close" src="/static/images/close.png" alt="" />
       <h2>註冊會員帳號</h2>
       <input type="text" placeholder="輸入姓名" />
-      <input type="email" name="email" placeholder="輸入電子郵件" />
-      <input type="password" name="password" placeholder="輸入密碼" />
+      <input
+        type="email"
+        name="email"
+        placeholder="輸入電子郵件"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="輸入密碼"
+        pattern="[a-zA-Z0-9]{8,}"
+        required
+        autocomplete=""
+      />
       <button>註冊新帳號</button>
       <span id="login_link">已經有帳戶了？點此登入</span>
     </div>

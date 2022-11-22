@@ -18,15 +18,17 @@
   --DarkCyanGradient: linear-gradient(270deg, #337788 0%, #66aabb 100%);
   --bluegrey: #aabbcc;
   --white: #ffffff;
+  --black: #000000;
 }
 
 input {
   color: var(--gray-50);
+  font-family: "Noto Sans TC", sans-serif;
 }
 
 body {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   font-family: "Noto Sans TC", sans-serif;
   font-size: 16px;
   line-height: 13.3px;
@@ -43,6 +45,7 @@ body {
   header {
     width: min(90%, 1198px);
     display: flex;
+    position: relative;
     flex-direction: column;
     margin: auto;
     align-items: flex-start;
@@ -56,14 +59,28 @@ body {
       font-weight: 700;
     }
 
-    input {
+    #search {
+      font-weight: 700;
       width: 370px;
-      padding: 15px;
+      height: 16px;
+      // padding: 11.5px 15px;
       border-radius: 5px 0px 0px 5px;
       border: none;
+      line-height: 13.3px;
+      font-size: 16px;
+      box-shadow: 0px 0px 20px #aabbcc;
+      outline: none;
+      padding: 15px;
+    }
+    #search:focus {
+      color: var(--black);
+    }
+    .category_text {
+      color: var(--black);
     }
     button {
-      padding: 15px;
+      width: 60px;
+      height: 46px;
       background-color: var(--cyan-70);
       color: transparent;
       background-image: url(../images/icon_search.png);
@@ -71,6 +88,7 @@ body {
       background-repeat: no-repeat;
       border-radius: 0px 5px 5px 0px;
       border: none;
+      font-size: 16px;
     }
   }
 }
@@ -79,13 +97,13 @@ body {
   background-color: var(--white);
   position: sticky;
   top: 0;
-  width: 100%;
   z-index: 10;
 }
 
 nav {
-  width: min(90%, 1180px);
-  height: 54px;
+  width: min(calc(100% - 25px), 1200px);
+  height: 34px;
+  padding: 10px;
   display: flex;
   justify-content: space-between;
   margin: auto;
@@ -97,6 +115,9 @@ nav {
     line-height: 34px;
     display: flex;
     align-items: center;
+    a {
+      color: inherit;
+    }
   }
   .nav_link {
     display: flex;
@@ -132,7 +153,6 @@ footer {
   z-index: 5;
   position: fixed;
   width: 310px;
-  //   height: 245px;
   top: 80px;
   left: 50%;
   transform: translate(-50%, 0px);
@@ -140,14 +160,22 @@ footer {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 15px;
+  padding: 5px 15px;
   margin: auto;
   text-align: center;
   color: var(--gray-70);
-  border-radius: 6px;
+  border-radius: 0px 0px 6px 6px;
   cursor: pointer;
+  .login_close,
+  .register_close {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    top: 7px;
+    right: calc(0% + 17px);
+  }
   h2 {
-    margin-bottom: 10px;
+    margin: 5px 0px;
     font-size: 24px;
     line-height: 24px;
     font-weight: 700;
@@ -157,12 +185,37 @@ footer {
     border-radius: 5px;
   }
   button {
-    padding: 15px;
+    padding: 10px 20px;
     background-color: var(--cyan-70);
     border-radius: 5px;
     color: var(--white);
     font-size: 19px;
   }
+}
+
+.login {
+  max-height: 265px;
+}
+.register {
+  max-height: 322px;
+}
+#register_link,
+#login_link {
+  margin-bottom: 2.5px;
+  padding: 5px 0px;
+}
+
+.login::before,
+.register::before {
+  content: "";
+  background: var(--DarkCyanGradient);
+  width: 100%;
+  height: 10px;
+  display: block;
+
+  position: absolute;
+  top: -10px;
+  left: 0px;
 }
 
 .active.login,
@@ -179,17 +232,27 @@ footer {
   right: 0;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.25);
+  z-index: 2;
 }
 
 @import "./home";
 @import "./attraction";
 
 @media (max-width: 505px) {
-  nav {
-    max-width: 100%;
-    padding: 0px 10px;
+  #search {
+    width: 200px;
   }
-  header label input {
-    width: 200px !important;
-  }
+}
+
+// for ios
+
+button,
+[type="submit"],
+[type="reset"] {
+  appearance: none;
+}
+
+html,
+body {
+  text-size-adjust: none;
 }

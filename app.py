@@ -1,5 +1,6 @@
-from mysql.connector import pooling
-import mysql.connector 
+from mysql.connector import pooling, Error
+import mysql.connector  
+
 
 from flask import Flask, render_template,request,jsonify
 
@@ -13,9 +14,12 @@ app.config["JSON_SORT_KEYS"]=False
 
 app.config["SECRET_KEY"]="eaf266f88f72894c90"
 
-cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 30, pool_reset_session=True ,user='root', password='thu982305',database='tpe_attraction',host="0.0.0.0")
+
+cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False ,user='root', password='thu982305',database='tpe_attraction',host="127.0.0.1")
 connection = cnxpool.get_connection()
 mycursor=connection.cursor()
+
+
 
 # Pages
 @app.route("/")
@@ -50,10 +54,14 @@ def getattractionByKW():
 	
 	
 	try:
-		mycursor.execute("select attractions.id, name, category, description, address, transport, mrt , lat, lng , images  from categories  inner join  attractions on attractions.category_id = categories.id where category=%(keyword)s or name like %(like_keyword)s  order by attractions.id   limit 12 offset %(offset)s  ", {"keyword":keyword, "offset":offset, "like_keyword":like_keyword}) 
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
+		mycursor.execute("select attractions.id, name, category, description, address, transport, mrt , lat, lng , images  from categories  inner join  attractions on attractions.category_id = categories.id where category=%(keyword)s or name like %(like_keyword)s  order by attractions.id   limit 13 offset %(offset)s  ", {"keyword":keyword, "offset":offset, "like_keyword":like_keyword}) 
 		search_result=mycursor.fetchall()
+
 		if(search_result):
 			count=0
+			# print(type(search_result))
 			for attraction in search_result:
 				images=attraction[-1].split(",")[:-1]
 				result={"id": attraction[0],"name":attraction[1],"category": attraction[2],"description": attraction[3],
@@ -61,26 +69,30 @@ def getattractionByKW():
 				"images": images}
 				data.append(result)
 				count=count+1
-			if count<12:
+			if count<13:
 				return jsonify({"nextPage": None,"data":data}),200
 			else:	
+				data.pop()
 				return jsonify({"nextPage": next_page,"data":data}),200
 		else:
-
 			result={"error":True,"message":"Data Not Found"}  
 			
 			return result,404
-	except:
+	except Error as e:
+		print(e)
 		result={"error":True,"message":"500 Internal Server Error"}  
 		return result,500 
-	# finally:
-	# 	mycursor.close()
+	finally:
+		mycursor.close()
+		connection.close()
 
 @app.route("/api/attraction/<attractionId>")
 def getattractionId(attractionId):
 	id=attractionId
 	result={}
 	try:
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
 		mycursor.execute("select attractions.id, name, category, description, address, transport, mrt , lat, lng , images  from categories  inner join  attractions on attractions.category_id = categories.id  where attractions.id=%(id)s", {"id":id}) 
 		attraction= mycursor.fetchone() 
 		if(attraction != None):
@@ -97,14 +109,21 @@ def getattractionId(attractionId):
 			result={"data":"erroe","message":"Search Not Found"}  
 			return result,404
 
-	except:
+	except Error as e:
+		print(e)
 		result={"error":True,"message":"與資料庫失聯"}  
 		return result
+	finally:
+		mycursor.close()
+		connection.close()
+		
 
 @app.route("/api/categories")
 def categorise():
 	
 	try:
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
 		data=[]
 		mycursor.execute("select category from categories")
 		result=mycursor.fetchall()
@@ -112,10 +131,15 @@ def categorise():
 			str = ''.join(item)
 			data.append(str)
 		return jsonify({"data":data}) 
-	except:
+	except Error as e:
+		print(e)
 		result={"error":True,"message":"500 Internal Server Error"}  
 		return result,500
+	finally:
+		mycursor.close()
+		connection.close()
+
 		
 if __name__ == "__main__":
-    app.run(port=3000,host="0.0.0.0")
+    app.run(port=3000)
 
