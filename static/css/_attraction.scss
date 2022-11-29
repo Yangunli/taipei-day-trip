@@ -4,9 +4,7 @@
   margin: auto;
   justify-content: center;
   scrollbar-width: thin;
-  margin-top: 54px;
   padding-top: 37px;
-  padding-bottom: 37px;
   gap: 30px;
   .carousel {
     overflow: hidden;
@@ -247,6 +245,22 @@
   flex-direction: column;
 }
 
+hr {
+  padding-bottom: 37px;
+  width: min(calc(100% - 25px), 1200px);
+  border: none;
+  border-bottom: 1px solid var(--gray-20);
+  margin: auto;
+}
+
+.hr {
+  margin: auto;
+  margin-top: 54px;
+  width: min(calc(100% - 25px), 1200px);
+  border: none;
+  border-bottom: 1px solid var(--gray-20);
+}
+
 @media screen and (max-width: 850px) {
   .attraction_main {
     width: 100%;
@@ -255,7 +269,6 @@
     align-items: center;
     scrollbar-width: thin;
     // margin-top: 54px;
-    padding-bottom: 37px;
     gap: 20px;
   }
   .carousel {
@@ -279,11 +292,20 @@
     width: min(calc(100% - 30px), 530px);
     margin: auto;
   }
+  hr {
+    padding-bottom: 37px;
+    width: min(calc(100% - 20px), 540px);
+  }
 }
 
 @media screen and (max-width: 580px) {
   .attraction_main {
     padding-top: 0px;
+  }
+  .hr {
+    padding-bottom: 0px;
+  }
+  hr {
     padding-bottom: 40px;
   }
 }
