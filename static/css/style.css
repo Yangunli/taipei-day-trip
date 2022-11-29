@@ -508,6 +508,7 @@ footer {
   height: 25px;
   padding: 3.4px 32.4px 3.4px 8.4px;
   background-color: var(--white);
+  color: var(--black);
 }
 .attraction_main .attraction_info .booking_container #booking_date input[type=date]::-webkit-clear-button {
   display: none;
@@ -626,7 +627,7 @@ footer {
     gap: 20px;
   }
   .carousel {
-    width: min(100% - 10px, 540px) !important;
+    width: min(100%, 540px) !important;
     height: 350px !important;
     margin: auto;
   }
