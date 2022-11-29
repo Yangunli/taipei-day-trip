@@ -172,7 +172,7 @@ footer {
 
 .login,
 .register {
-  z-index: 5;
+  z-index: 10;
   position: fixed;
   width: 310px;
   top: 80px;
@@ -264,7 +264,7 @@ footer {
   right: 0;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.25);
-  z-index: 2;
+  z-index: 9;
 }
 
 .transparent_overlay {
@@ -408,7 +408,7 @@ footer {
   margin: auto;
   justify-content: center;
   position: relative;
-  z-index: 10;
+  z-index: 5;
   bottom: 16px;
   transform: translateY(-50%);
   gap: 12px;
@@ -417,6 +417,7 @@ footer {
   width: 10.4px;
   height: 10.4px;
   border-radius: 50%;
+  opacity: 0.8;
   border: 1px solid var(--white);
   background-color: var(--white);
 }
@@ -451,13 +452,13 @@ footer {
   margin: auto;
   justify-content: space-between;
   position: relative;
-  z-index: 10;
+  z-index: 5;
   top: 50%;
   transform: translateY(-50%);
 }
 .attraction_main .carousel .carousel__actions button {
   position: absolute;
-  border-radius: 50px;
+  border-radius: 50%;
   background-image: url(../images/btn_leftArrow.png);
   background-size: cover;
   border: 0;
@@ -483,7 +484,7 @@ footer {
 .attraction_main .attraction_info .booking_container {
   background-color: var(--gray-20);
   max-width: 560px;
-  height: 272px;
+  height: 302px;
   padding: 15px 20px;
   gap: 15px;
   display: flex;
@@ -506,18 +507,10 @@ footer {
   width: 149px;
   height: 25px;
   padding: 3.4px 32.4px 3.4px 8.4px;
-}
-.attraction_main .attraction_info .booking_container #booking_date input[type=date]::-webkit-calendar-picker-indicator {
-  background: transparent;
+  background-color: var(--white);
 }
 .attraction_main .attraction_info .booking_container #booking_date input[type=date]::-webkit-clear-button {
   display: none;
-}
-.attraction_main .attraction_info .booking_container #booking_date #booking_calender {
-  position: absolute;
-  left: 235px;
-  top: 5px;
-  margin: auto;
 }
 .attraction_main .attraction_info .booking_container .booking_time p {
   border: 2px solid transparent;
@@ -615,6 +608,7 @@ footer {
   color: var(--gray-70);
   line-height: 25px;
   margin: auto;
+  padding-top: 50px;
   padding-bottom: 120px;
   gap: 20px;
   display: flex;
@@ -656,6 +650,7 @@ footer {
 @media screen and (max-width: 580px) {
   .attraction_main {
     padding-top: 0px;
+    padding-bottom: 40px;
   }
 }
 @media (max-width: 505px) {

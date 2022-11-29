@@ -15,7 +15,7 @@ app.config["JSON_SORT_KEYS"]=False
 app.config["SECRET_KEY"]="eaf266f88f72894c90"
 
 
-cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False ,user='root', password='thu982305',database='tpe_attraction',host="127.0.0.1")
+cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False ,user='root', password='thu982305',database='tpe_attraction',host="0.0.0.0")
 connection = cnxpool.get_connection()
 mycursor=connection.cursor()
 
@@ -141,5 +141,5 @@ def categorise():
 
 		
 if __name__ == "__main__":
-    app.run(port=3000)
+    app.run(port=3000,host="0.0.0.0")
 

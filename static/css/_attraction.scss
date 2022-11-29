@@ -21,7 +21,7 @@
     margin: auto;
     justify-content: center;
     position: relative;
-    z-index: 10;
+    z-index: 5;
     bottom: 16px;
     transform: translateY(-50%);
     gap: 12px;
@@ -29,6 +29,7 @@
       width: 10.4px;
       height: 10.4px;
       border-radius: 50%;
+      opacity: 0.8;
       border: 1px solid var(--white);
       background-color: var(--white);
       &:hover,
@@ -68,14 +69,14 @@
     margin: auto;
     justify-content: space-between;
     position: relative;
-    z-index: 10;
+    z-index: 5;
     top: 50%;
     transform: translateY(-50%);
   }
 
   .carousel .carousel__actions button {
     position: absolute;
-    border-radius: 50px;
+    border-radius: 50%;
     background-image: url(../images/btn_leftArrow.png);
     background-size: cover;
     border: 0;
@@ -104,7 +105,7 @@
     .booking_container {
       background-color: var(--gray-20);
       max-width: 560px;
-      height: 272px;
+      height: 302px;
       padding: 15px 20px;
       gap: 15px;
       display: flex;
@@ -126,18 +127,10 @@
           width: 149px;
           height: 25px;
           padding: 3.4px 32.4px 3.4px 8.4px;
-          &::-webkit-calendar-picker-indicator {
-            background: transparent;
-          }
+          background-color: var(--white);
           &::-webkit-clear-button {
             display: none;
           }
-        }
-        #booking_calender {
-          position: absolute;
-          left: 235px;
-          top: 5px;
-          margin: auto;
         }
       }
 
@@ -246,11 +239,11 @@
   color: var(--gray-70);
   line-height: 25px;
   margin: auto;
+  padding-top: 50px;
   padding-bottom: 120px;
   gap: 20px;
   display: flex;
   flex-direction: column;
-  // background-color: wheat;
 }
 
 @media screen and (max-width: 850px) {
@@ -290,5 +283,6 @@
 @media screen and (max-width: 580px) {
   .attraction_main {
     padding-top: 0px;
+    padding-bottom: 40px;
   }
 }

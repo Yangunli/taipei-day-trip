@@ -31,8 +31,18 @@
     <div class="login active">
       <img class="login_close" src="/static/images/close.png" alt="" />
       <h2>登入會員帳號</h2>
-      <input type="email" name="email" placeholder="輸入電子郵件" />
-      <input type="password" name="password" placeholder="輸入密碼" />
+      <input
+        type="email"
+        name="email"
+        placeholder="輸入電子郵件"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="輸入密碼"
+        pattern="[a-zA-Z0-9]{8,}"
+      />
       <button>登入帳號</button>
       <span id="register_link">還沒有帳戶？點此註冊</span>
     </div>
