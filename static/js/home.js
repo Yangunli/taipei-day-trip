@@ -14,6 +14,9 @@ const searchMenu = document.querySelector(".search_menu");
 const homeMainEl = document.querySelector(".home_main");
 const searchBtn = document.querySelector("#search_btn");
 
+//看偽元素的style
+// const beforeLoginEl = window.getComputedStyle(loginEl, "::before");
+
 const fetchCategories = async () => {
   await fetch(`${originUrl}/api/categories`)
     .then((response) => response.json())

@@ -1,5 +1,5 @@
-{% extends "base.html" %} {%block title%}台北一日遊 | 首頁 {%endblock%} {% block
-scripts %}
+{% extends "base.html" %} {%block title%}台北一日遊 | 景點頁面 {%endblock%} {%
+block scripts %}
 <script
   src="{{ url_for('static', filename='js/attraction.js') }}"
   defer
@@ -13,18 +13,42 @@ scripts %}
       <p>訂購導覽行程</p>
       <span>以此景點為中心的一日行程，帶您探索城市角落故事</span>
       <label for="booking_date" id="booking_date"
-        >選擇日期:
-        <input type="date" name="booking_date" placeholder="yyyy/mm/dd" />
+        ><p>選擇日期：</p>
+        <input
+          type="date"
+          name="booking_date"
+          placeholder="yyyy/mm/dd"
+          required
+        />
         <img
           src="/static/images/icon_calendar.png"
           alt="booking_calender"
           id="booking_calender"
-      /></label>
+        />
+      </label>
+      <div class="booking_time">
+        <p>選擇時間：</p>
+        <label for="first-half">
+          <input type="radio" id="first-half" />
+          <div class="radio_radio"></div>
+          上半天</label
+        >
+        <label for="second-half">
+          <input type="radio" id="second-half" />
+          <div class="radio_radio"></div>
+          下半天</label
+        >
+      </div>
+      <div class="attraction_fee">
+        導覽費用：
+        <p>請選擇方案</p>
+      </div>
+      <button id="booking_btn">開始預約行程</button>
     </div>
   </div>
 </main>
 
 <div class="attraction_container"></div>
-<footer><p>COPYRIGHT © 2021 台北一日遊</p></footer>
+<footer><p>COPYRIGHT © 2022 台北一日遊</p></footer>
 
 {% endblock %}
