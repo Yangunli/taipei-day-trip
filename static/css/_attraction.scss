@@ -256,7 +256,7 @@ hr {
 .hr {
   margin: auto;
   margin-top: 54px;
-  width: min(calc(100% - 25px), 1200px);
+  width: 100%;
   border: none;
   border-bottom: 1px solid var(--gray-20);
 }
