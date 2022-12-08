@@ -1,17 +1,31 @@
 .home_main {
+  display: grid;
+  justify-content: center;
   width: min(calc(100% - 30px), 1170px);
   min-height: calc(100vh - 588px);
-  display: grid;
   grid-template-columns: repeat(auto-fit, 270px);
   gap: 30px;
   padding: 55px 15px;
   margin: auto;
-  justify-content: center;
 }
 
 .card {
   width: 270px;
-
+  &:first-child:hover {
+    box-shadow: 0.5px 0.5px 0px rgb(0 0 0 / 0.2);
+  }
+  &:not(:first-child):hover {
+    box-shadow: 2px 2px 10px rgb(0 0 0 / 0.2);
+  }
+  &:hover {
+    transform: translateX(5px) translateY(-10px) scale(1.05);
+    overflow: hidden;
+  }
+  &:focus {
+    box-shadow: none;
+    outline: var(--cyan-50) dotted 2px;
+    outline-offset: 0.05em;
+  }
   .card_content {
     position: relative;
     background: var(--gray-20);
@@ -20,59 +34,56 @@
     background-position: center;
     background-size: cover;
     .card_title {
+      position: absolute;
+      inset: auto auto 0 0;
       display: flex;
       align-items: center;
-      position: absolute;
-      bottom: 0;
       width: calc(100% - 20px);
       height: 20px;
-      background-color: rgba(0, 0, 0, 0.6);
-      left: 0;
-      right: 0;
-      color: var(--white);
       padding: 10px;
       font-weight: 700;
-      line-height: 15.3px;
+      line-height: 17.5px;
+      background-color: rgb(0 0 0 /0.6);
+      color: var(--white);
     }
   }
   .card_info {
-    width: 100%;
-    height: 45px;
     display: flex;
     justify-content: space-between;
-    color: var(--gray-50);
+    width: 100%;
+    height: 45px;
     gap: 4px;
-    box-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px rgb(0 0 0/ 0.2);
+    color: var(--gray-50);
     border-radius: 0px 0px 5px 5px;
     span {
-      padding: 10px;
       display: flex;
       align-items: center;
+      padding: 10px;
     }
   }
 }
 
 .search_menu {
+  position: absolute;
+  z-index: 10;
+  bottom: -35px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  position: absolute;
-  bottom: -35px;
   max-height: 162px;
+  padding-block: 1px;
+  padding-right: 40px;
+  box-shadow: 0px 0px 20px var(--bluegrey);
   background-color: var(--white);
   color: var(--black);
-  z-index: 5;
   border-radius: 5px;
-  box-shadow: 0px 0px 20px #aabbcc;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-right: 40px;
+
   .category {
-    cursor: pointer;
     font-size: 14px;
-    // line-height: 20px;
     width: 90px;
     height: 20px;
     padding: 10px 15px;
+    cursor: pointer;
   }
   .category:hover {
     background-color: var(--gray-20);
@@ -86,15 +97,26 @@
 }
 
 .notfound {
-  width: 100%;
-  aspect-ratio: 13/16;
+  width: min(100%, 1200px);
+
   background-image: url(../images/notfound.png);
   background-size: cover;
+
+  aspect-ratio: 13/16;
 }
 
-@media (max-width: 630px) {
+.id_notfound {
+  width: min(calc(100% - 50px), 1200px);
+  height: min(calc(100vh - 200px), 1200px);
+  background-image: url(../images/miami.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+@media (max-width: 600px) {
   .home_main {
-    grid-template-columns: repeat(1, 321px);
+    grid-template-columns: repeat(2, 1fr);
     .card {
       width: 100%;
     }
@@ -102,6 +124,9 @@
 }
 
 @media (max-width: 505px) {
+  .home_main {
+    grid-template-columns: repeat(1, 321px);
+  }
   .search_menu {
     padding-right: 32px;
 

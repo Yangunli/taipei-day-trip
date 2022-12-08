@@ -26,7 +26,7 @@ block scripts %}
       <div class="booking_time">
         <p>選擇時間：</p>
         <label for="first-half">
-          <input type="radio" id="first-half" />
+          <input type="radio" id="first-half" checked value="1" />
           <div class="radio_radio"></div>
           上半天</label
         >
@@ -38,14 +38,23 @@ block scripts %}
       </div>
       <div class="attraction_fee">
         導覽費用：
-        <p>請選擇方案</p>
+        <p>新台幣 2000元</p>
       </div>
       <button id="booking_btn">開始預約行程</button>
     </div>
   </div>
 </main>
 <hr />
+
 <div class="attraction_container"></div>
+<dialog class="modal" id="modal">
+  <img
+    class="modal_close"
+    src="/static/images/close.png"
+    alt="modal_close"
+    onclick="modalClose()"
+  />
+</dialog>
 <footer><p>COPYRIGHT © 2022 台北一日遊</p></footer>
 
 {% endblock %}

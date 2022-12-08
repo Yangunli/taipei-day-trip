@@ -1,14 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap");
-
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   box-sizing: auto;
   text-decoration: none;
   font-family: "Noto Sans TC", sans-serif;
   scroll-behavior: smooth;
+  cursor: default;
 }
 
 button,
@@ -16,6 +15,15 @@ input {
   outline: none;
   border: none;
   appearance: none;
+}
+
+:focus:not(:focus-visible) {
+  outline: 0;
+}
+
+a:focus {
+  outline: white dotted 1px;
+  outline-offset: 0.05em;
 }
 
 a,
@@ -55,24 +63,27 @@ body {
 }
 
 .header_container {
+  width: 100%;
+  height: 320px;
   margin-top: 54px;
   background-image: url(../images/welcome.png);
   background-size: cover;
   background-position: 0% 0%;
-  width: 100%;
-  height: 320px;
 
   header {
-    width: min(calc(100% - 25px), 1200px);
-    display: flex;
     position: relative;
+    display: flex;
     flex-direction: column;
-    margin: auto;
     align-items: flex-start;
     justify-content: center;
+    width: min(calc(100% - 40px), 1200px);
     height: 100%;
-    color: var(--white);
+    margin: auto;
     gap: 15px;
+    padding-inline: 10px;
+    margin: auto;
+    color: var(--white);
+
     .slogan_title {
       font-size: 28px;
       line-height: 24px;
@@ -85,56 +96,56 @@ body {
     button {
       width: 60px;
       height: 46px;
-      background-color: var(--cyan-70);
-      color: transparent;
-      background-image: url(../images/icon_search.png);
-      background-position: center;
-      background-repeat: no-repeat;
+      font-size: 16px;
       border-radius: 0px 5px 5px 0px;
       border: none;
       outline: none;
-      font-size: 16px;
+      background-color: var(--cyan-70);
+      background-image: url(../images/icon_search.png);
+      background-position: center;
+      background-repeat: no-repeat;
+      color: transparent;
     }
   }
 }
 
 input#search {
-  font-weight: 700;
   width: 370px;
   height: 16px;
-  border-radius: 5px 0px 0px 5px;
+  box-shadow: 0px 0px 20px var(--bluegrey);
+  padding: 15px;
   line-height: 13.3px;
   font-size: 16px;
-  box-shadow: 0px 0px 20px var(--cyan-20);
-  padding: 15px;
-}
-#search:focus {
-  color: var(--black);
+  font-weight: 700;
+  border-radius: 5px 0px 0px 5px;
+  &:focus {
+    color: var(--black);
+  }
 }
 
 .nav-container {
-  background-color: var(--white);
   position: fixed;
-  width: 100%;
   top: 0;
-  z-index: 10;
+  z-index: 7;
+  width: 100%;
+  background-color: var(--white);
 }
 
 nav {
-  width: min(calc(100% - 25px), 1200px);
-  height: 34px;
-  padding: 10px;
   display: flex;
   justify-content: space-between;
+  width: min(calc(100% - 25px), 1200px);
+  height: 34px;
   margin: auto;
+  padding: 10px;
 
   h2 {
-    color: var(--cyan-70);
+    display: flex;
+    align-items: center;
     font-size: 30px;
     font-weight: 700;
     line-height: 34px;
-    display: flex;
-    align-items: center;
+    color: var(--cyan-70);
     a {
       color: inherit;
     }
@@ -155,46 +166,47 @@ nav {
       font-size: 16px;
       color: var(--gray-70);
     }
+    p {
+      cursor: pointer;
+    }
   }
 }
 
 footer {
-  // position: sticky;
-  // bottom: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 104px;
   background-color: var(--gray-50);
   color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .login,
 .register {
   z-index: 10;
-  position: fixed;
-  width: 310px;
   top: 80px;
   left: 50%;
-  transform: translate(-50%, 0px);
-  background-color: var(--white);
+  position: fixed;
   display: flex;
   flex-direction: column;
+  width: 310px;
   gap: 10px;
   padding: 5px 15px;
   margin: auto;
   text-align: center;
   color: var(--gray-70);
+  background-color: var(--white);
   border-radius: 0px 0px 6px 6px;
-  cursor: pointer;
+  transform: translate(-50%, 0px);
   .login_close,
   .register_close {
     position: absolute;
-    width: 26px;
-    height: 26px;
     top: 7px;
     right: calc(0% + 17px);
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
   }
   h2 {
     margin: 5px 0px;
@@ -206,39 +218,48 @@ footer {
     padding: 15px;
     border-radius: 5px;
     border: 1px solid #cccccc;
+    &:focus {
+      border: 2px solid var(--cyan-70);
+    }
+  }
+  input ~ p {
+    display: none;
+    color: rgb(212, 127, 127);
+    font-size: 13px;
   }
   button {
     padding: 10px 20px;
-    background-color: var(--cyan-70);
-    border-radius: 5px;
-    color: var(--white);
     font-size: 19px;
+    background-color: var(--cyan-70);
+    color: var(--white);
+    border-radius: 5px;
     border: none;
   }
 }
 
 .login {
-  max-height: 265px;
+  min-height: 255px;
 }
 .register {
-  max-height: 322px;
+  min-height: 312px;
 }
 #register_link,
 #login_link {
   margin-bottom: 2.5px;
-  padding: 5px 0px;
+  padding-block: 5px;
+  cursor: pointer;
 }
 
 .login::before,
 .register::before {
   content: "";
-  background: var(--DarkCyanGradient);
-  width: 100%;
-  height: 10px;
-  display: block;
   position: absolute;
   top: -10px;
   left: 0px;
+  display: block;
+  width: 100%;
+  height: 10px;
+  background: var(--DarkCyanGradient);
   border-radius: 6px 6px 0px 0px;
 }
 
@@ -251,23 +272,17 @@ footer {
 }
 
 .overlay {
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  inset: 0;
+  z-index: 9;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.25);
-  z-index: 9;
 }
 
 .transparent_overlay {
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
   position: fixed;
-  background-color: rgba(0, 0, 0, 0);
-  z-index: 2;
+  inset: 0;
+  z-index: 9;
+  background-color: transparent;
 }
 
 @import "./home";
@@ -278,15 +293,3 @@ footer {
     width: 200px;
   }
 }
-
-// for ios
-
-// a:focus,
-// button:focus-visible,
-// input:focus-visible,
-// select:focus-visible,
-// textarea:focus-visible {
-//   box-shadow: none;
-//   outline: #000 dotted 2px;
-//   outline-offset: 0.05em;
-// }
