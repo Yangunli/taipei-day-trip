@@ -5,14 +5,12 @@ const originUrl = window.location.origin;
 const memberEl = document.querySelector("#member");
 const transparentOverlayEl = document.querySelector(".transparent_overlay");
 const navEl = document.querySelector(".nav_link");
-const logoutEl = document.createElement("p");
-logoutEl.textContent = "登出";
 const loginEmail = document.querySelector("#login__email");
 const loginPassword = document.querySelector("#login__password");
 const registerName = document.querySelector("#register__name");
 const registerEmail = document.querySelector("#register__email");
 const registerPassword = document.querySelector("#register__password");
-
+const logoutEl = document.querySelector("#logout");
 // 會員系統邏輯
 
 const memberElClick = () => {
@@ -126,8 +124,6 @@ const registerHandler = () => {
       } else if (response.status == 400) {
         registerEmailErr.textContent = "此電子郵件已被註冊";
         registerEmailErr.style.display = "block";
-      } else {
-        console.log(response.status);
       }
     });
   }
@@ -195,7 +191,6 @@ const loginHandler = () => {
     });
   }
 };
-
 const token = document.cookie.split(";");
 const lastToken = token[token.length - 1];
 const cookie = lastToken.split("=")[1];
@@ -208,21 +203,26 @@ const loginChecked = () => {
       Authorization: cookie,
     },
   }).then(function (response) {
-    console.log(response);
+    // console.log(response);
     if (response.status == 200) {
-      memberEl.remove();
-      navEl.appendChild(logoutEl);
+      memberEl.style.display = "none";
+      logoutEl.style.display = "block";
     }
   });
 };
 
 loginChecked();
 
-logoutEl.addEventListener("click", () => {
+const logout = () => {
   fetch(`${originUrl}/api/user/auth`, {
     method: "Delete",
   }).then(function (response) {
-    document.cookie += "max-age=0";
-    window.location.reload();
+    if (response.status === 200) {
+      document.cookie += ";max-age=0";
+      memberEl.style.display = "block";
+      window.location.reload();
+    } else {
+      console.log(response);
+    }
   });
-});
+};

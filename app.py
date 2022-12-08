@@ -1,7 +1,7 @@
 from mysql.connector import pooling, Error
 import mysql.connector  
 from flask import Flask, render_template,request,jsonify,make_response
-from flask_jwt_extended import create_access_token, jwt_required,JWTManager, get_jwt_identity,create_refresh_token,verify_jwt_in_request
+from flask_jwt_extended import create_access_token, jwt_required,JWTManager, get_jwt_identity,create_refresh_token
 from datetime import timedelta
 from flask_bcrypt import Bcrypt
 import re
@@ -244,11 +244,11 @@ def login():
 	
 # 登出成功，從 Cookie 中移除 JWT 加密資訊
 @app.route("/api/user/auth" , methods=["DELETE"])
-@jwt_required(locations=["headers"])
 def logout():
 	res = make_response(jsonify({"ok":True}),200)
+	res.set_cookie('authorization', '', expires=0) 
 	return res
 
 if __name__ == "__main__":
-    app.run(port=3000, host="0.0.0.0")
+    app.run(port=3000,host="0.0.0.0")
 

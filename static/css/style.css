@@ -172,6 +172,9 @@ nav .nav_link p {
 nav .nav_link p {
   cursor: pointer;
 }
+nav .nav_link #logout {
+  display: none;
+}
 
 footer {
   display: flex;
