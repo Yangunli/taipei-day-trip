@@ -97,17 +97,21 @@ async function fetchBookingInfo() {
   });
   const result = await response.json();
   const data = result?.data;
-  console.log(data, 3);
+
   try {
     if (data) {
+      while (bookingAttracitonContainer.children.length >= 1)
+        bookingAttracitonContainer.removeChild(
+          bookingAttracitonContainer.lastElementChild
+        );
+
       let totalValue = 0;
       data.map((booking, i) => {
         renderBookingInfo(booking);
-        console.log(booking, i);
-
         totalValue += booking.price;
         orderBookingEl.appendChild(bookingAttracitonContainer);
         bookingValue.textContent = `總價 :新台幣${totalValue}元`;
+        console.log(booking);
       });
     } else {
       bookingAttracitonContainer.remove();
@@ -143,11 +147,6 @@ async function delectBookingInfo(orderId) {
   window.location.reload();
 }
 
-if (window.location.href === `${origin}/booking`) {
-  console.log("?????");
-  fetchBookingInfo();
-}
-
 // class Booking extends HTMLElement {
 //   constructor() {
 //     super();
@@ -155,3 +154,7 @@ if (window.location.href === `${origin}/booking`) {
 // }
 
 // customElements.define("booking", Booking);
+
+window.addEventListener("load", function (event) {
+  fetchBookingInfo();
+});
