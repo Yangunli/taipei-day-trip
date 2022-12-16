@@ -266,12 +266,12 @@ async function loginChecked() {
       Authorization: cookie,
     },
   });
-  if (response.status == 200) {
+  if (response.status === 200) {
     memberEl.style.display = "none";
     logoutEl.style.display = "block";
   }
   if (
-    response.status == 200 &&
+    response.status === 200 &&
     window.location.href === `${originUrl}/booking`
   ) {
     const result = await response.json();
@@ -281,7 +281,7 @@ async function loginChecked() {
     }
   }
   if (
-    response.status != 200 &&
+    response.status !== 200 &&
     window.location.href === `${originUrl}/booking`
   ) {
     window.location.href = originUrl;

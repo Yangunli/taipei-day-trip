@@ -236,6 +236,7 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
   }).then(function (response) {
     window.location.reload();
     console.log(response);
+    fetchBookingInfo();
   });
 });
 

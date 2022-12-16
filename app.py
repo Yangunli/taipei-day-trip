@@ -23,11 +23,9 @@ app.config['JWT_BLACKLIST_ENABLED'] = True #黑名單管理
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']  #允许将access and refresh tokens加入黑名单
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7) 
 
-cnx= mysql.connector.connect()
+
 dbconfig = {'user':os.getenv("MYSQL_USER"), 'password':os.getenv("MYSQL_PW"),'database':os.getenv("MYSQL_DB")}
-cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False,host="0.0.0.0", **dbconfig)
-connection = cnxpool.get_connection()
-mycursor=connection.cursor()
+cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30,host="0.0.0.0", **dbconfig)
 
 
 
@@ -65,10 +63,10 @@ def get_attraction_by_KW():
 	like_keyword=f'%{keyword}%'
 
 	
-	
+	connection = cnxpool.get_connection()
+	mycursor=connection.cursor()
 	try:
-		connection = cnxpool.get_connection()
-		mycursor=connection.cursor()
+		
 		mycursor.execute("select attractions.id, name, category, description, address, transport, mrt , lat, lng , images  from categories  inner join  attractions on attractions.category_id = categories.id where category=%(keyword)s or name like %(like_keyword)s  order by attractions.id   limit 13 offset %(offset)s  ", {"keyword":keyword, "offset":offset, "like_keyword":like_keyword}) 
 		search_result=mycursor.fetchall()
 
@@ -102,9 +100,10 @@ def get_attraction_by_KW():
 def getattractionId(attractionId):
 	id=attractionId
 	result={}
+	connection = cnxpool.get_connection()
+	mycursor=connection.cursor()
 	try:
-		connection = cnxpool.get_connection()
-		mycursor=connection.cursor()
+
 		mycursor.execute("select attractions.id, name, category, description, address, transport, mrt , lat, lng , images  from categories  inner join  attractions on attractions.category_id = categories.id  where attractions.id=%(id)s", {"id":id}) 
 		attraction= mycursor.fetchone() 
 		if(attraction != None):
@@ -132,10 +131,10 @@ def getattractionId(attractionId):
 
 @app.route("/api/categories")
 def categorise():
-	
+	connection = cnxpool.get_connection()
+	mycursor=connection.cursor()
 	try:
-		connection = cnxpool.get_connection()
-		mycursor=connection.cursor()
+
 		data=[]
 		mycursor.execute("select category from categories")
 		result=mycursor.fetchall()
@@ -162,9 +161,10 @@ def register():
 	password_regex = re.search(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}', password)
 	hashed_password=bcrypt.generate_password_hash(password=password)
 	if name_regex and email_regex and password_regex:
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
 		try:
-			connection = cnxpool.get_connection()
-			mycursor=connection.cursor()
+
 			mycursor.execute("insert into member(name,email,password) values(%(name)s,%(email)s,%(hashed_password)s)", {"name":name, "email":email, "hashed_password":hashed_password}) 
 			result= make_response(jsonify({"ok":True}),200)
 			connection.commit()
@@ -188,9 +188,10 @@ def register():
 def member():	
 	current_user = get_jwt_identity()
 	result = {}
+	connection = cnxpool.get_connection()
+	mycursor=connection.cursor()
 	try:
-		connection = cnxpool.get_connection()
-		mycursor=connection.cursor()
+
 		mycursor.execute("select id, name ,email from member where id =%(current_user)s", {"current_user":current_user}) 
 		user=mycursor.fetchone()
 		data={"id":user[0],"name":user[1],"email":user[2]}
@@ -216,10 +217,14 @@ def login():
 	password = request.json.get("password", None)
 	email_regex = re.search(r'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$', email)
 	password_regex = re.search(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}', password)
+
+
+	
 	if email_regex and password_regex:
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
 		try:
-			connection = cnxpool.get_connection()
-			mycursor=connection.cursor()
+
 			mycursor.execute("select id, password from member where email=%(email)s ",{"email":email,}) 
 			search_result=mycursor.fetchone()
 			id=search_result[0]
@@ -254,23 +259,31 @@ def logout():
 	res.set_cookie('authorization', '', expires=0) 
 	return res
 
+
+
+
+
 @app.route("/api/booking")
 @jwt_required(locations=["headers"])
 def get_booking_info():
 	user_id = get_jwt_identity()
 	result={}
 	
-	if user_id:
+	if user_id :
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
 		try:
-			connection = cnxpool.get_connection()
-			mycursor=connection.cursor()
-			mycursor.execute("select attractions.id,name,address,images,booking_date,booking_time,price,bookings.id from bookings inner join attractions on bookings.attraction_id = attractions.id where user_id=%(user_id)s and payment=0 order by user_id desc ",{"user_id":user_id,}) 
+			
+			mycursor.execute("select attractions.id,name,address,images,booking_date,booking_time,price,bookings.id from bookings inner join attractions on bookings.attraction_id = attractions.id where user_id=%s;",(user_id,)) 
 			search_result=mycursor.fetchall()
+			print(search_result)
+			
+			
 			if(search_result):
 				data=[]
 				for booking in search_result:
 
-					
+					print(booking)
 					attraction={}
 					attraction_id=booking[0]
 					attraction_name=booking[1]
@@ -279,11 +292,14 @@ def get_booking_info():
 					attraction.update({"id":attraction_id,"name":attraction_name, "address":attraction_address,"image":attraction_image})
 					booking={"orderId":booking[-1],"attraction":attraction,"date":booking[-4],"time":booking[-3],"price":booking[-2]}  
 					data.append(booking)
-
+			
 				result.update({"data":data})
+				
+			
 				return result,200
 			else:
 				result={"data":None}  
+				
 				return result,200
 		
 		except Error as e:
@@ -291,9 +307,9 @@ def get_booking_info():
 			result={"error":True,"message":"500 Internal Server Error"}  
 			return result,500
 		finally:
-			
 			mycursor.close()
 			connection.close()
+			print("????")
 	else:
 		result={"error":True,"message":"403 Forbidden"}  
 		return result,403
@@ -314,10 +330,10 @@ def create_booking():
 	bookingdate_check=(datetime(int(booking_datetime[0]),int(booking_datetime[1]),int(booking_datetime[2])) - current_time).total_seconds()
 
 	if user_id and bookingdate_check > ond_day_per_sec  :
-
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
 		try:
-			connection = cnxpool.get_connection()
-			mycursor=connection.cursor()
+
 			mycursor.execute("insert into bookings(user_id, attraction_id,booking_date,booking_time,price) values(%(user_id)s,%(attraction_id)s,%(booking_date)s,%(booking_time)s,%(booking_price)s)" ,{"user_id":user_id,"attraction_id":attraction_id,"booking_date":booking_date,"booking_time":booking_time,"booking_price":booking_price })
 			result= make_response(jsonify({"ok":True}),200)
 			connection.commit()
@@ -346,9 +362,10 @@ def cancel_booking():
 	user_id = get_jwt_identity()
 	order_id=request.json.get("orderId", None)
 	if user_id:
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
 		try:
-			connection = cnxpool.get_connection()
-			mycursor=connection.cursor()
+
 			mycursor.execute("delete from bookings where id=%(order_id)s and payment=0 ",{"order_id":order_id,}) 
 			connection.commit()
 			result={"ok":True}  
