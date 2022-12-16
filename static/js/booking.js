@@ -88,6 +88,7 @@ function renderBookingInfo(data) {
 async function fetchBookingInfo() {
   const response = await fetch(`${originUrl}/api/booking`, {
     method: "Get",
+    cache: "no-cache",
     headers: {
       Accept: "application/json",
       "Content-type": "application/json",
@@ -141,7 +142,11 @@ async function delectBookingInfo(orderId) {
   });
   window.location.reload();
 }
-fetchBookingInfo();
+
+if (window.location.href === `${origin}/booking`) {
+  console.log("?????");
+  fetchBookingInfo();
+}
 
 // class Booking extends HTMLElement {
 //   constructor() {

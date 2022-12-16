@@ -46,6 +46,7 @@ bookingEl.addEventListener("click", () => {
     return;
   }
   bookingEl.setAttribute("href", "/booking");
+  fetchBookingInfo();
 });
 
 const popupClose = () => {
@@ -255,6 +256,7 @@ const loginHandler = () => {
 const token = document.cookie.split(";");
 const lastToken = token[token.length - 1];
 const cookie = lastToken.split("=")[1];
+
 async function loginChecked() {
   const response = await fetch(`${originUrl}/api/user/auth`, {
     method: "Get",
@@ -301,3 +303,8 @@ const logout = () => {
     }
   });
 };
+
+memberEl.addEventListener("click", () => {
+  console.log(window.location.href);
+  fetchBookingInfo();
+});

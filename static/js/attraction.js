@@ -221,6 +221,7 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
   const bookingDate = bookingDateEl.value;
   fetch(`${originUrl}/api/booking`, {
     method: "Post",
+
     headers: {
       Accept: "application/json",
       "Content-type": "application/json",
@@ -233,6 +234,7 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
       price: price,
     }),
   }).then(function (response) {
+    window.location.reload();
     console.log(response);
   });
 });
