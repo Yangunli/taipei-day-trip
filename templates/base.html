@@ -30,19 +30,20 @@
     <div class="nav-container">
       <nav>
         <h2><a href="/">台北一日遊</a></h2>
-        <div class="nav_link">
-          <a id="booking" href="/">預定行程</a>
+        <div class="nav__link">
+          <a id="booking">預定行程</a>
           <p id="member" onclick="memberElClick()">登入/註冊</p>
           <p id="logout" onclick="logout()">登出</p>
         </div>
       </nav>
     </div>
-    <div class="login active" role="dialog">
+    <div class="login active" role="form" aria-label="Login information">
       <img
-        class="login_close"
+        class="login--close"
         src="/static/images/close.png"
-        alt="login_close"
+        alt="login close"
         onclick="loginElClose()"
+        role="button"
       />
       <h2>登入會員帳號</h2>
       <input
@@ -52,8 +53,7 @@
         placeholder="輸入電子郵件"
         required
         aria-required="true"
-        required=""
-        autocomplete=""
+        autocomplete="off"
       />
       <p id="login__email--text"></p>
       <input
@@ -61,17 +61,18 @@
         type="password"
         name="password"
         placeholder="輸入密碼"
+        aria-required="true"
         required
       />
       <p id="login__password--text"></p>
       <button id="login-member" onclick="loginHandler()">登入帳號</button>
-      <span id="register_link" onclick="linkToRegister()"
+      <span id="register__link" onclick="linkToRegister()"
         >還沒有帳戶？點此註冊</span
       >
     </div>
-    <div class="register active" role="dialog">
+    <div class="register active" role="form" aria-label="Register information">
       <img
-        class="register_close"
+        class="register--close"
         src="/static/images/close.png"
         alt="register_close"
         onclick="registerElClose()"
@@ -82,9 +83,8 @@
         type="text"
         placeholder="輸入姓名"
         name="name"
-        required
         aria-required="true"
-        required=""
+        required
       />
       <p id="register__name--text"></p>
       <input
@@ -104,14 +104,12 @@
         placeholder="輸入密碼"
         required
         aria-required="true"
-        required=""
-        autocomplete=""
       />
       <p id="register__password--text"></p>
-      <button id="register-member" onclick="registerHandler()">
+      <button id="register--submit" onclick="registerHandler()">
         註冊新帳號
       </button>
-      <span id="login_link" onclick="linkToLogin()"
+      <span id="login__link" onclick="linkToLogin()"
         >已經有帳戶了？點此登入</span
       >
     </div>

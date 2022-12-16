@@ -11,6 +11,7 @@ const registerName = document.querySelector("#register__name");
 const registerEmail = document.querySelector("#register__email");
 const registerPassword = document.querySelector("#register__password");
 const logoutEl = document.querySelector("#logout");
+const bookingEl = document.querySelector("#booking");
 // 會員系統邏輯
 
 const memberElClick = () => {
@@ -38,6 +39,15 @@ const registerElClose = () => {
   overlayEl.classList.add("active");
 };
 
+bookingEl.addEventListener("click", () => {
+  if (logoutEl.style.display !== "block") {
+    alert("請先登入");
+    memberElClick();
+    return;
+  }
+  bookingEl.setAttribute("href", "/booking");
+});
+
 const popupClose = () => {
   overlayEl.classList.add("active");
   loginEl.classList.add("active");
@@ -49,11 +59,62 @@ const nameRegex = new RegExp(
 );
 const emailRegex = new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/);
 const passwordRegex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}/);
+const phoneRegex = new RegExp(/^09\d{2}-?\d{3}-?\d{3}$/);
 const loginEmailErr = document.querySelector("#login__email--text");
 const loginPasswordErr = document.querySelector("#login__password--text");
 const registerNameErr = document.querySelector("#register__name--text");
 const registerEmailErr = document.querySelector("#register__email--text");
 const registerPasswordErr = document.querySelector("#register__password--text");
+
+function throttle(func, timeout = 250) {
+  let last;
+  let timer;
+
+  return function () {
+    const context = this;
+    const args = arguments;
+    const now = +new Date();
+
+    if (last && now < last + timeout) {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        last = now;
+        func.apply(context, args);
+      }, timeout);
+    } else {
+      last = now;
+      func.apply(context, args);
+    }
+  };
+}
+
+registerEmail.addEventListener(
+  "input",
+  throttle((e) => {
+    if (!emailRegex.test(e.target.value)) {
+      registerEmail.style.border = "2px solid red";
+      registerEmailErr.textContent = "⚠︎EMAIL格式不符⚠︎";
+      registerEmailErr.style.display = "block";
+    } else {
+      registerEmailErr.style.display = "none";
+      registerEmail.style.border = "1px solid #cccccc";
+    }
+  }, 500)
+);
+
+loginEmail.addEventListener(
+  "input",
+  throttle((e) => {
+    if (!emailRegex.test(e.target.value)) {
+      loginEmail.style.border = "2px solid red";
+      loginEmailErr.textContent = "⚠︎EMAIL格式不符⚠︎";
+      loginEmailErr.style.display = "block";
+    } else {
+      loginEmailErr.style.display = "none";
+      loginEmail.style.border = "1px solid #cccccc";
+    }
+  }, 500)
+);
 
 const registerHandler = () => {
   const name = registerName.value;
@@ -97,14 +158,15 @@ const registerHandler = () => {
     if (!nameMatchChecked) {
       registerNameErr.textContent = "請勿留白";
       registerNameErr.style.display = "block";
+      return;
     } else {
       registerNameErr.textContent = "應為全中文或英文";
       registerNameErr.style.display = "block";
+      return;
     }
   } else {
     registerNameErr.style.display = "none";
   }
-
   if (nameMatchChecked && emailMatchChecked && passwordMatchChecked) {
     fetch(`${originUrl}/api/user`, {
       method: "Post",
@@ -134,13 +196,11 @@ const loginHandler = () => {
   const password = loginPassword.value;
   const emailMatchChecked = emailRegex.test(email);
   const passwordMatchChecked = passwordRegex.test(password);
-
   if (!emailMatchChecked) {
     if (email.length) {
-      loginEmailErr.textContent = "email格式不符";
+      loginEmailErr.textContent = "⚠︎EMAIL格式不符⚠︎";
       loginEmailErr.style.display = "block";
-    }
-    if (!email.length) {
+    } else {
       loginEmailErr.textContent = "請勿留白";
       loginEmailErr.style.display = "block";
     }
@@ -191,25 +251,40 @@ const loginHandler = () => {
     });
   }
 };
+
 const token = document.cookie.split(";");
 const lastToken = token[token.length - 1];
 const cookie = lastToken.split("=")[1];
-const loginChecked = () => {
-  fetch(`${originUrl}/api/user/auth`, {
+async function loginChecked() {
+  const response = await fetch(`${originUrl}/api/user/auth`, {
     method: "Get",
     headers: {
       Accept: "application/json",
       "Content-type": "application/json",
       Authorization: cookie,
     },
-  }).then(function (response) {
-    // console.log(response);
-    if (response.status == 200) {
-      memberEl.style.display = "none";
-      logoutEl.style.display = "block";
-    }
   });
-};
+  if (response.status == 200) {
+    memberEl.style.display = "none";
+    logoutEl.style.display = "block";
+  }
+  if (
+    response.status == 200 &&
+    window.location.href === `${originUrl}/booking`
+  ) {
+    const result = await response.json();
+    const data = result.data;
+    if (data) {
+      bookingHeadline.textContent = `您好，${data.name.toUpperCase()}，待預訂的行程如下：`;
+    }
+  }
+  if (
+    response.status != 200 &&
+    window.location.href === `${originUrl}/booking`
+  ) {
+    window.location.href = originUrl;
+  }
+}
 
 loginChecked();
 

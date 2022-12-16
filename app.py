@@ -1,20 +1,21 @@
 from mysql.connector import pooling, Error
 import mysql.connector  
-from flask import Flask, render_template,request,jsonify,make_response
+from flask import Flask, render_template,request,jsonify,make_response,Blueprint
 from flask_jwt_extended import create_access_token, jwt_required,JWTManager, get_jwt_identity,create_refresh_token
-from datetime import timedelta
+from datetime import timedelta,datetime
 from flask_bcrypt import Bcrypt
 import re
-
-
-app=Flask(__name__)
+import os
+from dotenv import load_dotenv
+load_dotenv()
+app=Flask(__name__,instance_relative_config=True)
 bcrypt = Bcrypt()
 jwt = JWTManager(app)
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 app.config["JSON_SORT_KEYS"]=False
-app.config["SECRET_KEY"]="eaf266f88f72894c90"
-app.config["JWT_SECRET_KEY"] = "c099522c9feebd8d456f801fe8ba47065a3edd925cff28a5398a7adf07cc13e7" 
+app.config["SECRET_KEY"]=os.getenv("SECRET_KEY")
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config["JWT_COOKIE_SECURE"] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True  
 app.config['JWT_TOKEN_LOCATION'] = ["headers", "cookies"]
@@ -23,9 +24,12 @@ app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']  #允许将acce
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7) 
 
 cnx= mysql.connector.connect()
-cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False ,user='root', password='thu982305',database='tpe_attraction',host="0.0.0.0")
+dbconfig = {'user':os.getenv("MYSQL_USER"), 'password':os.getenv("MYSQL_PW"),'database':os.getenv("MYSQL_DB")}
+cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False,host="127.0.0.1", **dbconfig)
 connection = cnxpool.get_connection()
 mycursor=connection.cursor()
+
+
 
 
 
@@ -42,6 +46,7 @@ def attraction(id):
 def booking():
 	return render_template("booking.html")
 
+
 @app.route("/thankyou")
 def thankyou():
 	return render_template("thankyou.html")
@@ -51,7 +56,7 @@ def thankyou():
 # APIs
 
 @app.route("/api/attractions")
-def getattractionByKW():
+def get_attraction_by_KW():
 	data=[]
 	current_page=request.args.get("page",0)
 	next_page=int(current_page)+1
@@ -69,7 +74,6 @@ def getattractionByKW():
 
 		if(search_result):
 			count=0
-			# print(type(search_result))
 			for attraction in search_result:
 				images=attraction[-1].split(",")[:-1]
 				result={"id": attraction[0],"name":attraction[1],"category": attraction[2],"description": attraction[3],
@@ -191,6 +195,7 @@ def member():
 		user=mycursor.fetchone()
 		data={"id":user[0],"name":user[1],"email":user[2]}
 		result.update({"data": data}) 
+
 		return result, 200
 	except Error as e:
 		print(e)
@@ -249,6 +254,128 @@ def logout():
 	res.set_cookie('authorization', '', expires=0) 
 	return res
 
+@app.route("/api/booking")
+@jwt_required(locations=["headers"])
+def get_booking_info():
+	user_id = get_jwt_identity()
+	result={}
+	if user_id:
+		try:
+			connection = cnxpool.get_connection()
+			mycursor=connection.cursor()
+			mycursor.execute("select attractions.id,name,address,images,booking_date,booking_time,price from bookings inner join attractions on bookings.attraction_id = attractions.id where user_id=%(user_id)s and payment=0 ",{"user_id":user_id,}) 
+			search_result=mycursor.fetchone()
+		
+			if(search_result):
+				attraction={}
+				attraction_id=search_result[0]
+				attraction_name=search_result[1]
+				attraction_address=search_result[2]
+				attraction_image=search_result[3].split(",")[:-1][0]
+				attraction.update({"id":attraction_id,"name":attraction_name, "address":attraction_address,"image":attraction_image})
+				data={"attraction":attraction,"date":search_result[-3],"time":search_result[-2],"price":search_result[-1]}  
+				result.update({"data":data})
+				return result,200
+			else:
+				result={"data":None}  
+				return result,200
+		
+		except Error as e:
+			print(e)
+			result={"error":True,"message":"500 Internal Server Error"}  
+			return result,500
+		finally:
+			mycursor.close()
+			connection.close()
+	else:
+		result={"error":True,"message":"403 Forbidden"}  
+		return result,403
+
+
+
+@app.route("/api/booking", methods=["POST"])
+@jwt_required(locations=["headers"])
+def create_booking():
+	user_id = get_jwt_identity()
+	attraction_id= request.json.get("id", None)
+	booking_date = request.json.get("bookingDate", None)
+	booking_time = request.json.get("bookingTime", None)
+	booking_price = request.json.get("price", None)
+	current_time=datetime.now()
+	ond_day_per_sec=60*60*24
+	booking_datetime=booking_date.split("-")
+	bookingdate_check=(datetime(int(booking_datetime[0]),int(booking_datetime[1]),int(booking_datetime[2])) - current_time).total_seconds()
+
+	if user_id and bookingdate_check > ond_day_per_sec  :
+
+		try:
+			connection = cnxpool.get_connection()
+			mycursor=connection.cursor()
+			mycursor.execute("select * from bookings where user_id=%(user_id)s ",{"user_id":user_id,}) 
+			search_result=mycursor.fetchone()
+			if(search_result):
+				mycursor.execute("update bookings set attraction_id=%(attraction_id)s,booking_date=%(booking_date)s,booking_time=%(booking_time)s, price=%(booking_price)s   where user_id=%(user_id)s and payment=0 ",{"user_id":user_id,"attraction_id":attraction_id,"booking_date":booking_date,"booking_time":booking_time,"booking_price":booking_price })
+				result= make_response(jsonify({"ok":True}),200)
+				connection.commit()
+				print(search_result,user_id)
+				return result
+			else:
+				mycursor.execute("insert into bookings(user_id, attraction_id,booking_date,booking_time,price) values(%(user_id)s,%(attraction_id)s,%(booking_date)s,%(booking_time)s,%(booking_price)s)" ,{"user_id":user_id,"attraction_id":attraction_id,"booking_date":booking_date,"booking_time":booking_time,"booking_price":booking_price })
+				result= make_response(jsonify({"ok":True}),200)
+				connection.commit()
+				print(search_result,user_id,3)
+				return result
+		
+		except Error as e:
+			print(e)
+			result={"error":True,"message":"500 Internal Server Error"}  
+			return result,500
+		finally:
+			mycursor.close()
+			connection.close()
+	elif  bookingdate_check > ond_day_per_sec:
+		result={"error":True,"message":"403 Forbidden"}  
+		return result,403
+	else:
+		result={"error":True,"message":"400 Your booking date doesn't make sense. "}  
+		return result,400
+
+
+
+@app.route("/api/booking", methods=["DELETE"])
+@jwt_required(locations=["headers"])
+def cancel_booking():
+	user_id = get_jwt_identity()
+	if user_id:
+		try:
+			connection = cnxpool.get_connection()
+			mycursor=connection.cursor()
+			mycursor.execute("delete from bookings where user_id=%(user_id)s and payment=0 ",{"user_id":user_id,}) 
+			connection.commit()
+			result={"ok":True}  
+			return result,200
+		
+		except Error as e:
+			print(e)
+			result={"error":True,"message":"500 Internal Server Error"}  
+			return result,500
+		finally:
+			mycursor.close()
+			connection.close()
+	else:
+		result={"error":True,"message":"403 Forbidden"}  
+		return result,403
+
+	
+
+@app.route("/api/orders", methods=["POST"])
+def get_booking_payment():
+	pass
+
+@app.route("/api/order/<orderNumber>")
+def get_order_info(order_number):
+	pass
+
 if __name__ == "__main__":
-    app.run(port=3000,host="0.0.0.0")
+    app.run(port=3000)
 
