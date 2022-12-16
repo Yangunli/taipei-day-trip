@@ -25,7 +25,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7)
 
 cnx= mysql.connector.connect()
 dbconfig = {'user':os.getenv("MYSQL_USER"), 'password':os.getenv("MYSQL_PW"),'database':os.getenv("MYSQL_DB")}
-cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False,host="127.0.0.1", **dbconfig)
+cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False,host="0.0.0.0", **dbconfig)
 connection = cnxpool.get_connection()
 mycursor=connection.cursor()
 
@@ -376,5 +376,5 @@ def get_order_info(order_number):
 	pass
 
 if __name__ == "__main__":
-    app.run(port=3000)
+    app.run(port=3000, host="0.0.0.0")
 
