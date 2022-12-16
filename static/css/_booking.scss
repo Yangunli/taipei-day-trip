@@ -66,47 +66,51 @@
       background-color: var(--white);
     }
     .order__booking__attraction {
-      color: var(--gray-70);
-      background-color: var(--white);
-      max-width: 980px;
-      margin: auto;
-      min-height: 200px;
-      display: flex;
-      gap: 22px;
-      padding-bottom: 40px;
-      figure {
-        width: 250px;
-        min-width: 200px;
-        padding-inline: 8px;
-        height: 200px;
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center;
-        }
-      }
-      section {
-        position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      .order__booking__attraction__item {
+        color: var(--gray-70);
+        background-color: var(--white);
+        max-width: 980px;
+        margin: auto;
+        min-height: 200px;
         display: flex;
-        flex-direction: column;
-        gap: 20px;
-        width: 700px;
-        height: 200px;
-        padding-top: 5px;
-
-        h2 {
-          font-size: 16px;
-          line-height: 13px;
-          color: var(--cyan-70);
-          font-weight: 700;
-          padding-bottom: 10px;
+        gap: 22px;
+        padding-bottom: 40px;
+        figure {
+          width: 250px;
+          min-width: 200px;
+          padding-inline: 8px;
+          height: 200px;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+          }
         }
-        .booking__attraction__info {
+        section {
+          position: relative;
           display: flex;
-          gap: 5px;
-          dt {
+          flex-direction: column;
+          gap: 20px;
+          width: 700px;
+          height: 200px;
+          padding-top: 5px;
+
+          h2 {
+            font-size: 16px;
+            line-height: 13px;
+            color: var(--cyan-70);
             font-weight: 700;
+            padding-bottom: 10px;
+          }
+          .booking__attraction__info {
+            display: flex;
+            gap: 5px;
+            dt {
+              font-weight: 700;
+            }
           }
         }
       }
@@ -172,10 +176,12 @@
       }
 
       .order__booking__attraction {
-        width: calc(100% - 100px);
-        padding-inline: 50px;
-        section {
-          width: 400px;
+        .order__booking__attraction__item {
+          width: calc(100% - 100px);
+          padding-inline: 50px;
+          section {
+            width: 400px;
+          }
         }
       }
     }
@@ -202,8 +208,10 @@
         padding-inline: 25px;
       }
       .order__booking__attraction {
-        section {
-          width: 300px;
+        .order__booking__attraction__item {
+          section {
+            width: 300px;
+          }
         }
       }
     }
@@ -217,7 +225,7 @@
     }
   }
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
   .order {
     .order__checkout {
       padding-right: 20px;
@@ -244,21 +252,23 @@
         padding-block: 46px 7px;
       }
       .order__booking__attraction {
-        width: calc(100% - 20px);
-        flex-direction: column;
-        padding-inline: 10px;
+        .order__booking__attraction__item {
+          width: calc(100% - 20px);
+          flex-direction: column;
+          padding-inline: 10px;
 
-        figure {
-          width: 100%;
-          height: calc(200px + 10vw);
-          padding-block: 28px;
-          padding-inline: 0px !important;
-          margin: auto;
-        }
-        section {
-          width: 100% !important;
-          h2 {
+          figure {
             width: 100%;
+            height: calc(200px + 10vw);
+            padding-block: 28px;
+            padding-inline: 0px !important;
+            margin: auto;
+          }
+          section {
+            width: 100% !important;
+            h2 {
+              width: 100%;
+            }
           }
         }
       }

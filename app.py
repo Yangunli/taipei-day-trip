@@ -25,7 +25,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7)
 
 cnx= mysql.connector.connect()
 dbconfig = {'user':os.getenv("MYSQL_USER"), 'password':os.getenv("MYSQL_PW"),'database':os.getenv("MYSQL_DB")}
-cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False,host="0.0.0.0", **dbconfig)
+cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False,host="127.0.0.1", **dbconfig)
 connection = cnxpool.get_connection()
 mycursor=connection.cursor()
 
@@ -259,21 +259,27 @@ def logout():
 def get_booking_info():
 	user_id = get_jwt_identity()
 	result={}
+	
 	if user_id:
 		try:
 			connection = cnxpool.get_connection()
 			mycursor=connection.cursor()
-			mycursor.execute("select attractions.id,name,address,images,booking_date,booking_time,price from bookings inner join attractions on bookings.attraction_id = attractions.id where user_id=%(user_id)s and payment=0 ",{"user_id":user_id,}) 
-			search_result=mycursor.fetchone()
-		
+			mycursor.execute("select attractions.id,name,address,images,booking_date,booking_time,price,bookings.id from bookings inner join attractions on bookings.attraction_id = attractions.id where user_id=%(user_id)s and payment=0 order by user_id desc ",{"user_id":user_id,}) 
+			search_result=mycursor.fetchall()
 			if(search_result):
-				attraction={}
-				attraction_id=search_result[0]
-				attraction_name=search_result[1]
-				attraction_address=search_result[2]
-				attraction_image=search_result[3].split(",")[:-1][0]
-				attraction.update({"id":attraction_id,"name":attraction_name, "address":attraction_address,"image":attraction_image})
-				data={"attraction":attraction,"date":search_result[-3],"time":search_result[-2],"price":search_result[-1]}  
+				data=[]
+				for booking in search_result:
+
+					
+					attraction={}
+					attraction_id=booking[0]
+					attraction_name=booking[1]
+					attraction_address=booking[2]
+					attraction_image=booking[3].split(",")[:-1][0]
+					attraction.update({"id":attraction_id,"name":attraction_name, "address":attraction_address,"image":attraction_image})
+					booking={"orderId":booking[-1],"attraction":attraction,"date":booking[-4],"time":booking[-3],"price":booking[-2]}  
+					data.append(booking)
+
 				result.update({"data":data})
 				return result,200
 			else:
@@ -285,6 +291,7 @@ def get_booking_info():
 			result={"error":True,"message":"500 Internal Server Error"}  
 			return result,500
 		finally:
+			
 			mycursor.close()
 			connection.close()
 	else:
@@ -311,20 +318,11 @@ def create_booking():
 		try:
 			connection = cnxpool.get_connection()
 			mycursor=connection.cursor()
-			mycursor.execute("select * from bookings where user_id=%(user_id)s ",{"user_id":user_id,}) 
-			search_result=mycursor.fetchone()
-			if(search_result):
-				mycursor.execute("update bookings set attraction_id=%(attraction_id)s,booking_date=%(booking_date)s,booking_time=%(booking_time)s, price=%(booking_price)s   where user_id=%(user_id)s and payment=0 ",{"user_id":user_id,"attraction_id":attraction_id,"booking_date":booking_date,"booking_time":booking_time,"booking_price":booking_price })
-				result= make_response(jsonify({"ok":True}),200)
-				connection.commit()
-				print(search_result,user_id)
-				return result
-			else:
-				mycursor.execute("insert into bookings(user_id, attraction_id,booking_date,booking_time,price) values(%(user_id)s,%(attraction_id)s,%(booking_date)s,%(booking_time)s,%(booking_price)s)" ,{"user_id":user_id,"attraction_id":attraction_id,"booking_date":booking_date,"booking_time":booking_time,"booking_price":booking_price })
-				result= make_response(jsonify({"ok":True}),200)
-				connection.commit()
-				print(search_result,user_id,3)
-				return result
+			mycursor.execute("insert into bookings(user_id, attraction_id,booking_date,booking_time,price) values(%(user_id)s,%(attraction_id)s,%(booking_date)s,%(booking_time)s,%(booking_price)s)" ,{"user_id":user_id,"attraction_id":attraction_id,"booking_date":booking_date,"booking_time":booking_time,"booking_price":booking_price })
+			result= make_response(jsonify({"ok":True}),200)
+			connection.commit()
+			print(user_id,3)
+			return result
 		
 		except Error as e:
 			print(e)
@@ -346,11 +344,12 @@ def create_booking():
 @jwt_required(locations=["headers"])
 def cancel_booking():
 	user_id = get_jwt_identity()
+	order_id=request.json.get("orderId", None)
 	if user_id:
 		try:
 			connection = cnxpool.get_connection()
 			mycursor=connection.cursor()
-			mycursor.execute("delete from bookings where user_id=%(user_id)s and payment=0 ",{"user_id":user_id,}) 
+			mycursor.execute("delete from bookings where id=%(order_id)s and payment=0 ",{"order_id":order_id,}) 
 			connection.commit()
 			result={"ok":True}  
 			return result,200
@@ -377,5 +376,5 @@ def get_order_info(order_number):
 	pass
 
 if __name__ == "__main__":
-    app.run(port=3000, host="0.0.0.0")
+    app.run(port=3000)
 

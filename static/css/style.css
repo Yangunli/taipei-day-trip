@@ -832,6 +832,10 @@ iframe {
   background-color: var(--white);
 }
 .order .order__booking .order__booking__attraction {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.order .order__booking .order__booking__attraction .order__booking__attraction__item {
   color: var(--gray-70);
   background-color: var(--white);
   max-width: 980px;
@@ -841,13 +845,13 @@ iframe {
   gap: 22px;
   padding-bottom: 40px;
 }
-.order .order__booking .order__booking__attraction figure {
+.order .order__booking .order__booking__attraction .order__booking__attraction__item figure {
   width: 250px;
   min-width: 200px;
   padding-inline: 8px;
   height: 200px;
 }
-.order .order__booking .order__booking__attraction figure img {
+.order .order__booking .order__booking__attraction .order__booking__attraction__item figure img {
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
@@ -855,7 +859,7 @@ iframe {
   -o-object-position: center;
      object-position: center;
 }
-.order .order__booking .order__booking__attraction section {
+.order .order__booking .order__booking__attraction .order__booking__attraction__item section {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -864,18 +868,18 @@ iframe {
   height: 200px;
   padding-top: 5px;
 }
-.order .order__booking .order__booking__attraction section h2 {
+.order .order__booking .order__booking__attraction .order__booking__attraction__item section h2 {
   font-size: 16px;
   line-height: 13px;
   color: var(--cyan-70);
   font-weight: 700;
   padding-bottom: 10px;
 }
-.order .order__booking .order__booking__attraction section .booking__attraction__info {
+.order .order__booking .order__booking__attraction .order__booking__attraction__item section .booking__attraction__info {
   display: flex;
   gap: 5px;
 }
-.order .order__booking .order__booking__attraction section .booking__attraction__info dt {
+.order .order__booking .order__booking__attraction .order__booking__attraction__item section .booking__attraction__info dt {
   font-weight: 700;
 }
 .order .order__booking .order__booking__attraction #order__booking--delect {
@@ -937,11 +941,11 @@ iframe {
     width: calc(100% - 100px);
     padding-inline: 50px;
   }
-  .order .order__booking .order__booking__attraction {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item {
     width: calc(100% - 100px);
     padding-inline: 50px;
   }
-  .order .order__booking .order__booking__attraction section {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item section {
     width: 400px;
   }
   .order__contact h2,
@@ -960,7 +964,7 @@ iframe {
     width: calc(100% - 50px);
     padding-inline: 25px;
   }
-  .order .order__booking .order__booking__attraction section {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item section {
     width: 300px;
   }
   .order__contact h2,
@@ -970,7 +974,7 @@ iframe {
     line-height: 23px;
   }
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
   .order .order__checkout {
     padding-right: 20px;
   }
@@ -993,22 +997,22 @@ iframe {
   .order .order__booking .order__booking__headline {
     padding-block: 46px 7px;
   }
-  .order .order__booking .order__booking__attraction {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item {
     width: calc(100% - 20px);
     flex-direction: column;
     padding-inline: 10px;
   }
-  .order .order__booking .order__booking__attraction figure {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item figure {
     width: 100%;
     height: calc(200px + 10vw);
     padding-block: 28px;
     padding-inline: 0px !important;
     margin: auto;
   }
-  .order .order__booking .order__booking__attraction section {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item section {
     width: 100% !important;
   }
-  .order .order__booking .order__booking__attraction section h2 {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item section h2 {
     width: 100%;
   }
   .order .order__booking #order__booking--delect {

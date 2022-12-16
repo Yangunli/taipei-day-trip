@@ -234,7 +234,6 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
     }),
   }).then(function (response) {
     console.log(response);
-    console.log(id, bookingDate, bookingTime, price);
   });
 });
 
