@@ -14,7 +14,7 @@
     display: flex;
     align-items: flex-end;
     flex-direction: column;
-    width: 100%;
+    width: calc(100% - 110px);
     gap: 35px;
     color: var(--gray-70);
     padding-block: 43px 62px;
@@ -71,7 +71,6 @@
       .order__booking__attraction__item {
         color: var(--gray-70);
         background-color: var(--white);
-        max-width: 980px;
         margin: auto;
         min-height: 200px;
         display: flex;
@@ -109,7 +108,12 @@
             display: flex;
             gap: 5px;
             dt {
+              min-width: 80px;
               font-weight: 700;
+            }
+            dl {
+              word-wrap: break-word;
+              line-height: 1.1;
             }
           }
         }
@@ -180,7 +184,7 @@
           width: calc(100% - 100px);
           padding-inline: 50px;
           section {
-            width: 400px;
+            width: 450px;
           }
         }
       }
@@ -198,6 +202,7 @@
 @media screen and (max-width: 800px) {
   .order {
     .order__checkout {
+      width: calc(100% - 50px);
       padding-right: 50px;
     }
     .order__booking {
@@ -208,9 +213,12 @@
         padding-inline: 25px;
       }
       .order__booking__attraction {
+        padding-inline: 0px;
         .order__booking__attraction__item {
+          width: calc(100% - 5px);
+          padding-inline: 0px;
           section {
-            width: 300px;
+            width: 400px;
           }
         }
       }
@@ -228,6 +236,7 @@
 @media screen and (max-width: 700px) {
   .order {
     .order__checkout {
+      width: calc(100% - 20px);
       padding-right: 20px;
     }
     .order__contact,
@@ -252,16 +261,18 @@
         padding-block: 46px 7px;
       }
       .order__booking__attraction {
+        width: calc(100% - 20px);
+
         .order__booking__attraction__item {
-          width: calc(100% - 20px);
+          width: 100%;
+          align-items: center;
           flex-direction: column;
           padding-inline: 10px;
-
           figure {
             width: 100%;
             height: calc(200px + 10vw);
             padding-block: 28px;
-            padding-inline: 0px !important;
+            padding-inline: 0px;
             margin: auto;
           }
           section {
@@ -275,7 +286,7 @@
       #order__booking--delect {
         position: absolute;
         top: auto !important;
-        bottom: 0px !important;
+        bottom: -15px !important;
       }
     }
   }
@@ -286,6 +297,7 @@
     .order__booking {
       .order__booking__attraction {
         figure {
+          width: 100%;
           height: 200px;
         }
       }
