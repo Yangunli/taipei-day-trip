@@ -8,6 +8,13 @@ const id = parseInt(path[2]);
 const attractionInfo = document.querySelector(".attraction_info");
 const attractionContainer = document.querySelector(".attraction_container");
 
+const redirectModel = document.querySelector("#modal__redirect");
+const redirectModelClose = document.querySelector(".modal__redirect--close");
+
+redirectModelClose.addEventListener("click", () => {
+  redirectModel.close();
+});
+
 function modalClose() {
   modalEl.close();
 }
@@ -53,7 +60,7 @@ function renderInfoDOM(data) {
     "src",
     `https://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=${data.lat},${data.lng}&z=16&output=embed&t=`
   );
-  // attractionMap.setAttribute("");
+
   modalEl.appendChild(attractionMap);
 
   const transportContainer = document.createElement("div");
@@ -101,7 +108,7 @@ async function fetchAttractionInfo() {
 
     const slides = document.getElementsByClassName("carousel__item");
     const totalSlides = slides.length;
-    const radios = document.querySelectorAll(".carousel_radio");
+    const radios = document.querySelectorAll(".carousel__radios__radio ");
 
     radios.forEach((radio, i) => {
       radio.addEventListener("click", () => {
@@ -234,9 +241,7 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
       price: price,
     }),
   }).then(function (response) {
-    window.location.reload();
-    console.log(response);
-    fetchBookingInfo();
+    redirectModel.showModal();
   });
 });
 

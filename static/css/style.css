@@ -1,3 +1,4 @@
+@charset "UTF-8";
 *,
 *::before,
 *::after {
@@ -754,13 +755,66 @@ iframe {
   height: 300px;
 }
 
-.modal_close {
+.modal_close,
+.modal__redirect--close {
   position: absolute;
-  top: 7px;
-  right: calc(0% + 10px);
+  inset: auto 20px auto auto;
   width: 26px;
   height: 26px;
   cursor: pointer;
+}
+
+.modal__redirect__content {
+  width: 300px;
+  min-height: 300px;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.modal__redirect__content::before {
+  content: "訂購成功";
+  display: inline-block;
+  z-index: 100;
+  position: absolute;
+  font-size: 19px;
+  color: var(--black);
+  opacity: 0.7;
+  letter-spacing: 0.8em;
+  inset: 45% calc(50% - 6px) auto auto;
+  transform: translateX(50%);
+}
+.modal__redirect__content img {
+  width: 100%;
+  height: 100%;
+}
+.modal__redirect__content .modal__redirect__group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-items: center;
+}
+.modal__redirect__content .modal__redirect__group a {
+  color: var(--cyan-70);
+  text-decoration: none;
+  position: relative;
+}
+.modal__redirect__content .modal__redirect__group a:after, .modal__redirect__content .modal__redirect__group a::before {
+  content: "";
+  position: absolute;
+  display: block;
+  border-bottom: 1px dashed black;
+  width: 1px;
+  opacity: 0;
+  transition: width ease-in-out 0.5s;
+}
+.modal__redirect__content .modal__redirect__group a::after {
+  height: 5px;
+}
+.modal__redirect__content .modal__redirect__group a::before {
+  height: 0px;
+  top: -5px;
+}
+.modal__redirect__content .modal__redirect__group a:hover::after, .modal__redirect__content .modal__redirect__group a:hover::before {
+  opacity: 1;
+  width: 100%;
 }
 
 .order {

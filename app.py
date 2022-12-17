@@ -274,16 +274,15 @@ def get_booking_info():
 		mycursor=connection.cursor()
 		try:
 			
-			mycursor.execute("select attractions.id,name,address,images,booking_date,booking_time,price,bookings.id from bookings inner join attractions on bookings.attraction_id = attractions.id where user_id=%s;",(user_id,)) 
+			mycursor.execute("select attractions.id,name,address,images,booking_date,booking_time,price,bookings.id from bookings inner join attractions on bookings.attraction_id = attractions.id where user_id=%(user_id)s", {"user_id":user_id}) 
 			search_result=mycursor.fetchall()
-			print(search_result)
+			
 			
 			
 			if(search_result):
 				data=[]
 				for booking in search_result:
 
-					print(booking)
 					attraction={}
 					attraction_id=booking[0]
 					attraction_name=booking[1]
@@ -309,7 +308,7 @@ def get_booking_info():
 		finally:
 			mycursor.close()
 			connection.close()
-			print("????")
+	
 	else:
 		result={"error":True,"message":"403 Forbidden"}  
 		return result,403
