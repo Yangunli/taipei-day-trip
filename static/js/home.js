@@ -1,7 +1,7 @@
 const searchEl = document.querySelector("#search");
-const searchMenu = document.querySelector(".search_menu");
-const homeMainEl = document.querySelector(".home_main");
-const searchBtn = document.querySelector("#search_btn");
+const searchMenu = document.querySelector(".search__menu");
+const homeMainEl = document.querySelector(".home__main");
+const searchBtn = document.querySelector("#search__btn");
 
 //看偽元素的style
 // const beforeLoginEl = window.getComputedStyle(loginEl, "::before");
@@ -16,7 +16,7 @@ const searchMenuClose = () => {
   searchMenu.classList.add("active");
 };
 
-const renderAttractionDOM = (attraction) => {
+function renderAttractionDOM(attraction) {
   const cardEl = document.createElement("a");
   cardEl.setAttribute("class", "card");
   cardEl.setAttribute("tabindex", "0");
@@ -24,19 +24,19 @@ const renderAttractionDOM = (attraction) => {
   cardEl.setAttribute("data-id", attraction.id);
 
   const cardContentEl = document.createElement("div");
-  cardContentEl.setAttribute("class", "card_content");
+  cardContentEl.setAttribute("class", "card__content");
   cardContentEl.setAttribute(
     "style",
     `background-image: url(${attraction.images[0]});`
   );
 
   const cardTitle = document.createElement("div");
-  cardTitle.setAttribute("class", "card_title");
+  cardTitle.setAttribute("class", "card__title");
   cardTitle.textContent = attraction.name;
   cardContentEl.appendChild(cardTitle);
 
   const cardInfoEl = document.createElement("div");
-  cardInfoEl.setAttribute("class", "card_info");
+  cardInfoEl.setAttribute("class", "card__info");
   const mrtEl = document.createElement("span");
   mrtEl.setAttribute("class", "mrt");
   mrtEl.textContent = attraction.mrt;
@@ -47,14 +47,14 @@ const renderAttractionDOM = (attraction) => {
   cardEl.appendChild(cardContentEl);
   cardEl.appendChild(cardInfoEl);
   homeMainEl.appendChild(cardEl);
-};
+}
 
 const fetchCategories = async () => {
   const response = await fetch(`${originUrl}/api/categories`);
   const result = await response.json();
   const data = result.data;
   data.map((category) => {
-    const categoryEl = document.createElement("span");
+    const categoryEl = document.createElement("p");
     categoryEl.setAttribute("class", "category");
     if (category == "其他") categoryEl.textContent = "其　　他";
     else categoryEl.textContent = category;

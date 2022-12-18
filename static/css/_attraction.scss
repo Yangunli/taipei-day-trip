@@ -1,4 +1,4 @@
-.attraction_main {
+.attraction {
   display: flex;
   margin: auto;
   justify-content: center;
@@ -15,7 +15,7 @@
     overflow: hidden;
   }
 
-  .carousel .carousel_radios {
+  .carousel .carousel__radios {
     position: relative;
     z-index: 5;
     bottom: 16px;
@@ -25,7 +25,7 @@
     gap: 12px;
     transform: translateY(-50%);
 
-    .carousel_radio {
+    .carousel__radios__radio {
       width: 10.4px;
       height: 10.4px;
       border-radius: 50%;
@@ -115,7 +115,7 @@
       p {
         font-weight: 700;
       }
-      #booking_date {
+      .booking_date {
         position: relative;
         max-height: 35px;
         p {
@@ -135,6 +135,7 @@
       }
 
       .booking_time {
+        display: flex;
         p {
           display: inline-flex;
           align-items: center;
@@ -142,38 +143,25 @@
           margin: auto 0;
           border: 2px solid transparent;
         }
-        label {
-          display: inline-flex;
+        .firstHalf,
+        .secondHalf {
+          display: flex;
           align-items: center;
-          justify-content: center;
-          margin: auto 0;
           margin-right: 18px;
-          cursor: pointer;
-          transform: translateY(4px);
-          input {
-            display: none;
-            &:focus + .radio_radio::after,
-            &:checked + .radio_radio::after {
-              transform: scale(1);
-            }
-          }
-          .radio_radio {
-            width: 18px;
-            height: 18px;
-            margin-right: 6px;
-            background-color: var(--white);
-            border-radius: 15px;
-            border: 2px solid var(--white);
+          gap: 6px;
 
-            &::after {
-              display: block;
-              width: 100%;
-              height: 100%;
+          input[type="radio"] {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--white);
+            border-radius: 50%;
+            background-color: var(--white);
+            &:checked {
               background-color: var(--cyan-70);
-              border-radius: 15px;
-              content: "";
-              transform: translate(6px, 6px);
-              transform: scale(0);
+            }
+            & ~ p {
+              font-weight: 500;
             }
           }
         }
@@ -260,7 +248,7 @@ hr {
 }
 
 @media screen and (max-width: 850px) {
-  .attraction_main {
+  .attraction {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -339,11 +327,68 @@ iframe {
   height: 300px;
 }
 
-.modal_close {
+.modal_close,
+.modal__redirect--close {
   position: absolute;
-  top: 7px;
-  right: calc(0% + 10px);
+  inset: auto 20px auto auto;
   width: 26px;
   height: 26px;
   cursor: pointer;
+}
+
+.modal__redirect__content {
+  width: min(300px, 500px);
+  min-height: 300px;
+  display: grid;
+  grid-template-columns: 1fr;
+  &::before {
+    content: "訂購成功";
+    display: inline-block;
+    z-index: 100;
+    position: absolute;
+    font-size: 19px;
+    color: var(--black);
+    opacity: 0.7;
+    letter-spacing: 0.8em;
+    inset: 45% calc(50% - 6px) auto auto;
+    transform: translateX(50%);
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .modal__redirect__group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    place-items: center;
+    a {
+      color: var(--cyan-70);
+      text-decoration: none;
+      position: relative;
+
+      &:after,
+      &::before {
+        content: "";
+        position: absolute;
+        display: block;
+        border-bottom: 1px dashed black;
+        width: 1px;
+        opacity: 0;
+        transition: width ease-in-out 0.5s;
+      }
+      &::after {
+        height: 5px;
+      }
+      &::before {
+        height: 0px;
+        top: -5px;
+      }
+      &:hover::after,
+      &:hover::before {
+        opacity: 1;
+        width: 100%;
+      }
+    }
+  }
 }

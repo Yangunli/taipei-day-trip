@@ -1,9 +1,9 @@
 {% extends "base.html" %} {%block title%}台北一日遊 | 首頁 {%endblock%} {% block
 content %}
-<div role="banner" class="header_container">
+<div role="banner" class="header__container">
   <header>
-    <div class="slogan_title">輕鬆享受台北一日悠閒</div>
-    <span>探索每個角落，體驗城市的深度旅遊行程</span>
+    <div class="header__slogan">輕鬆享受台北一日悠閒</div>
+    <p>探索每個角落，體驗城市的深度旅遊行程</p>
     <label for="search"
       ><input
         role="search"
@@ -12,12 +12,11 @@ content %}
         autocomplete="off"
         id="search"
         onkeydown="keyDownHandler();"
-      /><button id="search_btn" onclick="getKeyword()">btn</button>
+      /><button id="search__btn" onclick="getKeyword()">btn</button>
     </label>
-    <div class="active search_menu"></div>
+    <div class="active search__menu"></div>
   </header>
 </div>
-<main class="home_main"></main>
+<main class="home__main"></main>
 <footer><p>COPYRIGHT © 2022 台北一日遊</p></footer>
-
 {% endblock %}

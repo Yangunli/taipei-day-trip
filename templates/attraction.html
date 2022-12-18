@@ -6,35 +6,40 @@ block scripts %}
 ></script>
 {%endblock%} {% block content %}
 <div class="hr"></div>
-<main class="attraction_main">
+<main class="attraction">
   <div class="carousel"></div>
   <div class="attraction_info">
     <div class="booking_title"></div>
     <div class="booking_container">
       <p>訂購導覽行程</p>
       <span>以此景點為中心的一日行程，帶您探索城市角落故事</span>
-      <label for="booking_date" id="booking_date"
+      <label for="booking_date" class="booking_date"
         ><p>選擇日期：</p>
         <input
+          id="booking_date"
           type="date"
           name="booking_date"
           placeholder="yyyy/mm/dd"
           pattern="\d{4}-\d{2}-\d{2}"
+          autocomplete="off"
           required
         />
       </label>
-      <div class="booking_time">
+      <div
+        class="booking_time"
+        role="radiogroup"
+        aria-labelledby="Choose booking time"
+      >
         <p>選擇時間：</p>
-        <label for="first-half">
-          <input type="radio" id="first-half" checked value="1" />
-          <div class="radio_radio"></div>
-          上半天</label
-        >
-        <label for="second-half">
-          <input type="radio" id="second-half" />
-          <div class="radio_radio"></div>
-          下半天</label
-        >
+        <div class="firstHalf">
+          <input id="firstHalf__radio" type="radio" name="firstHalf" checked />
+          <p>上半天</p>
+        </div>
+
+        <div class="secondHalf">
+          <input type="radio" name="secondHalf" id="secondHalf__radio" />
+          <p>下半天</p>
+        </div>
       </div>
       <div class="attraction_fee">
         導覽費用：
@@ -55,6 +60,18 @@ block scripts %}
     onclick="modalClose()"
   />
 </dialog>
+<dialog class="modal" id="modal__redirect">
+  <img
+    class="modal__redirect--close"
+    src="/static/images/close.png"
+    alt="close redirect modal"
+  />
+  <div class="modal__redirect__content">
+    <img src="../static/images/bookingsucess.png" alt="" />
+    <div class="modal__redirect__group">
+      <a href="/">訂購更多</a> <a href="/booking">前往結帳</a>
+    </div>
+  </div>
+</dialog>
 <footer><p>COPYRIGHT © 2022 台北一日遊</p></footer>
-
 {% endblock %}
