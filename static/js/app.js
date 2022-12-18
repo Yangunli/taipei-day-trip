@@ -92,28 +92,30 @@ function throttle(func, timeout = 250) {
 registerEmail.addEventListener(
   "input",
   throttle((e) => {
-    if (!emailRegex.test(e.target.value)) {
-      registerEmail.style.border = "2px solid red";
-      registerEmailErr.textContent = "⚠︎EMAIL格式不符⚠︎";
-      registerEmailErr.style.display = "block";
-    } else {
-      registerEmailErr.style.display = "none";
-      registerEmail.style.border = "1px solid #cccccc";
-    }
-  }, 500)
+    registerEmail.style.border = emailRegex.test(e.target.value)
+      ? "1px solid #cccccc"
+      : "2px solid red";
+    registerEmailErr.textContent = emailRegex.test(e.target.value)
+      ? ""
+      : "⚠︎EMAIL格式不符⚠︎";
+    registerEmailErr.style.display = emailRegex.test(e.target.value)
+      ? "none"
+      : "block";
+  }, 300)
 );
 
 loginEmail.addEventListener(
   "input",
   throttle((e) => {
-    if (!emailRegex.test(e.target.value)) {
-      loginEmail.style.border = "2px solid red";
-      loginEmailErr.textContent = "⚠︎EMAIL格式不符⚠︎";
-      loginEmailErr.style.display = "block";
-    } else {
-      loginEmailErr.style.display = "none";
-      loginEmail.style.border = "1px solid #cccccc";
-    }
+    loginEmail.style.border = emailRegex.test(e.target.value)
+      ? "1px solid #cccccc"
+      : "2px solid red";
+    loginEmailErr.style.display = emailRegex.test(e.target.value)
+      ? "none"
+      : "block";
+    loginEmailErr.textContent = emailRegex.test(e.target.value)
+      ? ""
+      : "⚠︎EMAIL格式不符⚠︎";
   }, 500)
 );
 
@@ -125,49 +127,21 @@ const registerHandler = () => {
   const emailMatchChecked = emailRegex.test(email);
   const passwordMatchChecked = passwordRegex.test(password);
 
-  if (!emailMatchChecked) {
-    if (email.length) {
-      registerEmailErr.textContent = "⚠︎EMAIL格式不符⚠︎";
-      registerEmailErr.style.display = "block";
-    }
-    if (!email.length) {
-      registerEmailErr.textContent = "請勿留白";
-      registerEmailErr.style.display = "block";
-    }
-  } else {
-    registerEmailErr.style.display = "none";
-  }
+  registerEmailErr.style.display = emailMatchChecked ? "none" : "block";
+  registerEmailErr.textContent = email.length
+    ? "⚠︎EMAIL格式不符⚠︎"
+    : "請勿留白";
 
-  if (!passwordMatchChecked) {
-    if (!password.length) {
-      registerPasswordErr.textContent = "請勿留白";
-      registerPasswordErr.style.display = "block";
-    }
+  registerPasswordErr.style.display = passwordMatchChecked ? "none" : "block";
+  registerPasswordErr.textContent = password.length
+    ? password.length >= 8 && password.length <= 12
+      ? "密碼至少各有一個大小寫英文及數字"
+      : "密碼長度介於8-12個"
+    : "請勿留白";
 
-    if (password.length >= 8 && password.length <= 12) {
-      registerPasswordErr.textContent = "密碼至少各有一個大小寫英文及數字";
-      registerPasswordErr.style.display = "block";
-    } else {
-      registerPasswordErr.textContent = "密碼長度介於8-12個";
-      registerPasswordErr.style.display = "block";
-    }
-  } else {
-    registerPasswordErr.style.display = "none";
-  }
+  registerNameErr.style.display = nameMatchChecked ? "none" : "block";
+  registerNameErr.textContent = name.length ? "應為全中文或英文" : "請勿留白";
 
-  if (!nameMatchChecked) {
-    if (!nameMatchChecked) {
-      registerNameErr.textContent = "請勿留白";
-      registerNameErr.style.display = "block";
-      return;
-    } else {
-      registerNameErr.textContent = "應為全中文或英文";
-      registerNameErr.style.display = "block";
-      return;
-    }
-  } else {
-    registerNameErr.style.display = "none";
-  }
   if (nameMatchChecked && emailMatchChecked && passwordMatchChecked) {
     fetch(`${originUrl}/api/user`, {
       method: "Post",
@@ -197,34 +171,15 @@ const loginHandler = () => {
   const password = loginPassword.value;
   const emailMatchChecked = emailRegex.test(email);
   const passwordMatchChecked = passwordRegex.test(password);
-  if (!emailMatchChecked) {
-    if (email.length) {
-      loginEmailErr.textContent = "⚠︎EMAIL格式不符⚠︎";
-      loginEmailErr.style.display = "block";
-    } else {
-      loginEmailErr.textContent = "請勿留白";
-      loginEmailErr.style.display = "block";
-    }
-  } else {
-    loginEmailErr.style.display = "none";
-  }
+  loginEmailErr.style.display = emailMatchChecked ? "none" : "block";
+  loginEmailErr.textContent = email.length ? "⚠︎EMAIL格式不符⚠︎" : "請勿留白";
+  loginPasswordErr.style.display = passwordMatchChecked ? "none" : "block";
+  loginPasswordErr.textContent = password.length
+    ? password.length >= 8 && password.length <= 12
+      ? "密碼至少各有一個大小寫英文及數字"
+      : "密碼長度介於8-12個"
+    : "請勿留白";
 
-  if (!passwordMatchChecked) {
-    if (!password.length) {
-      loginPasswordErr.textContent = "請勿留白";
-      loginPasswordErr.style.display = "block";
-    }
-
-    if (password.length >= 8 && password.length <= 12) {
-      loginPasswordErr.textContent = "密碼至少各有一個大小寫英文及數字";
-      loginPasswordErr.style.display = "block";
-    } else {
-      loginPasswordErr.textContent = "密碼長度介於8-12個";
-      loginPasswordErr.style.display = "block";
-    }
-  } else {
-    loginPasswordErr.style.display = "none";
-  }
   if (emailMatchChecked && passwordMatchChecked) {
     fetch(`${originUrl}/api/user/auth`, {
       method: "Put",

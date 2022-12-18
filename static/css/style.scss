@@ -4,6 +4,7 @@
   margin: 0px;
   padding: 0px;
   box-sizing: auto;
+  font-size: inherit;
   text-decoration: none;
   font-family: "Noto Sans TC", sans-serif;
   scroll-behavior: smooth;
@@ -22,6 +23,8 @@
   --bluegrey: #aabbcc;
   --white: #ffffff;
   --black: #000000;
+
+  --primary-border-radius: 5px;
 }
 
 html,
@@ -58,7 +61,6 @@ button {
 
 body {
   width: 100%;
-  font-size: 16px;
   line-height: 13.3px;
   font-weight: 500;
 }
@@ -98,7 +100,8 @@ body {
       width: 60px;
       height: 46px;
       font-size: 16px;
-      border-radius: 0px 5px 5px 0px;
+      border-radius: 0px var(--primary-border-radius)
+        (var(--primary-border-radius)) 0px;
       border: none;
       outline: none;
       background-color: var(--cyan-70);
@@ -118,7 +121,8 @@ input#search {
   line-height: 13.3px;
   font-size: 16px;
   font-weight: 700;
-  border-radius: 5px 0px 0px 5px;
+  border-radius: var(--primary-border-radius) 0px 0px
+    var(--primary-border-radius);
   &:focus {
     color: var(--black);
   }
@@ -220,7 +224,7 @@ footer {
   }
   input {
     padding: 15px;
-    border-radius: 5px;
+    border-radius: var(--primary-border-radius);
     border: 1px solid #cccccc;
     color: rgb(75, 71, 71);
     &:focus {
@@ -237,7 +241,7 @@ footer {
     font-size: 19px;
     background-color: var(--cyan-70);
     color: var(--white);
-    border-radius: 5px;
+    border-radius: var(--primary-border-radius);
     border: none;
   }
 }

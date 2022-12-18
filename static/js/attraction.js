@@ -78,7 +78,6 @@ function renderInfoDOM(data) {
   nextBtn.setAttribute("id", "carousel__button--next");
   actionContainer.appendChild(prevBtn);
   actionContainer.appendChild(nextBtn);
-
   images.map((img, i) => {
     const attractionEl = document.createElement("div");
     attractionEl.setAttribute("class", "carousel__item");
@@ -102,8 +101,18 @@ async function fetchAttractionInfo() {
     const response = await fetch(`${originUrl}/api/attraction/${id}`);
     const result = await response.json();
     const data = result?.data;
+    if (typeof data == "string") {
+      carouselEl.remove();
+      attractionInfo.remove();
+      attractionContainer.remove();
+      const notfoundEl = document.createElement("div");
+      notfoundEl.setAttribute("class", "attraction__notfound ");
+      notfoundEl.textContent = "查無此景點ID";
+      // attractionMainEl.style.background = "var(--LightCyanGradient)";
+      attractionMainEl.appendChild(notfoundEl);
+      return;
+    }
     renderInfoDOM(data);
-
     let slidePosition = 0;
 
     const slides = document.getElementsByClassName("carousel__item");
@@ -162,17 +171,11 @@ async function fetchAttractionInfo() {
       });
     document
       .querySelector(".material-symbols-outlined")
-      .addEventListener("click", () => {
+      .addEventListener("click", function () {
         modalEl.showModal();
       });
   } catch (e) {
     console.log(e);
-    carouselEl.remove();
-    attractionInfo.remove();
-    attractionContainer.remove();
-    const notfoundEl = document.createElement("div");
-    notfoundEl.setAttribute("class", "attraction__notfound ");
-    attractionMainEl.appendChild(notfoundEl);
   }
 }
 
@@ -182,9 +185,6 @@ const feeEl = document.querySelector(".attraction_fee");
 firstHalfEl.addEventListener("change", () => {
   secondHalfEl.checked = false;
   feeEl.childNodes[1].textContent = "新台幣 2000元";
-  if (firstHalfEl.checked) {
-    // console.log("hi~~~", firstHalfEl);
-  }
 });
 
 secondHalfEl.addEventListener("change", () => {
@@ -193,11 +193,8 @@ secondHalfEl.addEventListener("change", () => {
 });
 
 fetchAttractionInfo();
-
+// 用 new Date() < new Date(e.target.value) 比較日期
 const bookingDateEl = document.querySelector("#booking_date");
-bookingDateEl.addEventListener("input", (e) => {
-  // 用 new Date() < new Date(e.target.value) 比較日期
-});
 
 const dayReg = new RegExp(/\d{4}-\d{2}-\d{2}$/);
 
@@ -224,7 +221,7 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
     document.querySelector("[type=radio]:checked").name === "firstHalf"
       ? "morning"
       : "afternoon";
-  document.querySelector("#booking_btn").disabled = false;
+
   const bookingDate = bookingDateEl.value;
   fetch(`${originUrl}/api/booking`, {
     method: "Post",
@@ -275,4 +272,4 @@ bookingDateEl.setAttribute(
   `${currentYear}-${currentMonth}-${currentDate}`
 );
 
-console.log(new Date().toLocaleString("en-CA-u-hc-h24").replace(",", ""));
+// console.log(new Date().toLocaleString("en-CA-u-hc-h24").replace(",", ""));

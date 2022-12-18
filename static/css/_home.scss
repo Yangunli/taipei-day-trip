@@ -55,7 +55,8 @@
     gap: 4px;
     box-shadow: 1px 1px rgb(0 0 0/ 0.2);
     color: var(--gray-50);
-    border-radius: 0px 0px 5px 5px;
+    border-radius: 0px 0px var(--primary-border-radius)
+      (--primary-border-radius);
     span {
       display: flex;
       align-items: center;
@@ -76,7 +77,7 @@
   box-shadow: 0px 0px 20px var(--bluegrey);
   background-color: var(--white);
   color: var(--black);
-  border-radius: 5px;
+  border-radius: var(--primary-border-radius);
 
   .category {
     font-size: 14px;
@@ -86,7 +87,7 @@
     cursor: pointer;
     &:hover {
       background-color: var(--gray-20);
-      border-radius: 5px;
+      border-radius: var(--primary-border-radius);
     }
   }
 }
@@ -106,12 +107,43 @@
 }
 
 .attraction__notfound {
-  width: min(calc(100% - 50px), 1200px);
-  height: min(calc(100vh - 200px), 1200px);
-  background-image: url(../images/miami.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding-block: calc(50vh - 124px);
+  font-size: calc(3vw + 2rem);
+  text-align: center;
+
+  &::before,
+  &::after {
+    position: absolute;
+    bottom: calc(50% - 3vw - 2rem);
+    height: calc(3vw + 2rem);
+    font-family: "Font Awesome 5 Free";
+    font-weight: 700;
+    font-size: inherit;
+    color: var(--bluegrey);
+    content: "\f6e2";
+
+    --position: -25px;
+  }
+  &::before {
+    left: var(--position);
+    transform: translateX(-50%);
+  }
+  &::after {
+    right: var(--position);
+    transform: translateX(50%);
+  }
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-image: url(../images/welcome.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
 }
 
 @media (max-width: 600px) {
@@ -132,6 +164,15 @@
 
     .category {
       width: 66px;
+    }
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .attraction__notfound {
+    &::before,
+    &::after {
+      content: "";
     }
   }
 }

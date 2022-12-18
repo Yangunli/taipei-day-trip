@@ -106,12 +106,11 @@ async function fetchBookingInfo() {
         );
 
       let totalValue = 0;
-      data.map((booking, i) => {
+      data.map((booking) => {
         renderBookingInfo(booking);
         totalValue += booking.price;
         orderBookingEl.appendChild(bookingAttracitonContainer);
         bookingValue.textContent = `總價 :新台幣${totalValue}元`;
-        console.log(booking);
       });
     } else {
       bookingAttracitonContainer.remove();
