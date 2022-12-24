@@ -171,6 +171,7 @@ const loginHandler = () => {
   const password = loginPassword.value;
   const emailMatchChecked = emailRegex.test(email);
   const passwordMatchChecked = passwordRegex.test(password);
+
   loginEmailErr.style.display = emailMatchChecked ? "none" : "block";
   loginEmailErr.textContent = email.length ? "⚠︎EMAIL格式不符⚠︎" : "請勿留白";
   loginPasswordErr.style.display = passwordMatchChecked ? "none" : "block";
@@ -225,6 +226,7 @@ async function loginChecked() {
     memberEl.style.display = "none";
     logoutEl.style.display = "block";
   }
+
   if (
     response.status === 200 &&
     window.location.href === `${originUrl}/booking`
@@ -235,9 +237,12 @@ async function loginChecked() {
       bookingHeadline.textContent = `您好，${data.name.toUpperCase()}，待預訂的行程如下：`;
     }
   }
+  if (response.status !== 200 && window.location.pathname === "/booking") {
+    window.location.href = originUrl;
+  }
   if (
     response.status !== 200 &&
-    window.location.href === `${originUrl}/booking`
+    window.location.pathname.split("/")[1] === "thankyou"
   ) {
     window.location.href = originUrl;
   }
@@ -253,13 +258,20 @@ const logout = () => {
       document.cookie += ";max-age=0";
       memberEl.style.display = "block";
       window.location.reload();
-    } else {
-      console.log(response);
     }
   });
 };
 
-memberEl.addEventListener("click", () => {
-  console.log(window.location.href);
-  fetchBookingInfo();
-});
+const passwordTypeEyes = document.querySelectorAll(".password--type");
+for (const passwordTypeEye of passwordTypeEyes) {
+  passwordTypeEye.addEventListener("click", () => {
+    const type =
+      passwordTypeEye.textContent === "visibility" ? "password" : "text";
+    passwordTypeEye.previousElementSibling.setAttribute("type", type);
+    if (passwordTypeEye.textContent.trim() === "visibility") {
+      passwordTypeEye.textContent += "_off";
+    } else {
+      passwordTypeEye.textContent = "visibility";
+    }
+  });
+}

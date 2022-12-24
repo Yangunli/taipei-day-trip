@@ -1,15 +1,9 @@
-@charset "UTF-8";
-*,
-*::before,
-*::after {
+* {
   margin: 0px;
   padding: 0px;
   box-sizing: auto;
   font-size: inherit;
-  text-decoration: none;
   font-family: "Noto Sans TC", sans-serif;
-  scroll-behavior: smooth;
-  cursor: default;
 }
 
 :root {
@@ -24,7 +18,9 @@
   --bluegrey: #aabbcc;
   --white: #ffffff;
   --black: #000000;
+  --error: rgb(212, 127, 127);
   --primary-border-radius: 5px;
+  --input-border: 1px solid #cccccc;
 }
 
 html,
@@ -42,6 +38,7 @@ input {
      -moz-appearance: none;
           appearance: none;
   font-size: initial;
+  line-height: 13.3px;
 }
 
 :focus:not(:focus-visible) {
@@ -56,6 +53,7 @@ a:focus {
 a,
 button {
   cursor: pointer;
+  text-decoration: none;
 }
 
 [type=submit],
@@ -69,15 +67,17 @@ body {
   width: 100%;
   line-height: 13.3px;
   font-weight: 500;
+  color: var(--gray-70);
+  scroll-behavior: smooth;
+  cursor: default;
 }
 
 .header__container {
   width: 100%;
   height: 320px;
   margin-top: 54px;
-  background-image: url(../images/welcome.png);
+  background-image: url(../images/welcome.webp);
   background-size: cover;
-  background-position: 0% 0%;
 }
 .header__container header {
   position: relative;
@@ -104,10 +104,9 @@ body {
 .header__container header button {
   width: 60px;
   height: 46px;
-  font-size: 16px;
-  border-radius: 0px var(--primary-border-radius) var(--primary-border-radius) 0px;
-  border: none;
-  outline: none;
+  border-top-right-radius: var(--primary-border-radius);
+  border-top-right-radius: var(--primary-border-radius);
+  border-bottom-right-radius: var(--primary-border-radius);
   background-color: var(--cyan-70);
   background-image: url(../images/icon_search.png);
   background-position: center;
@@ -120,10 +119,10 @@ input#search {
   height: 16px;
   box-shadow: 0px 0px 20px var(--bluegrey);
   padding: 15px;
-  line-height: 13.3px;
   font-size: 16px;
   font-weight: 700;
-  border-radius: var(--primary-border-radius) 0px 0px var(--primary-border-radius);
+  border-top-left-radius: var(--primary-border-radius);
+  border-bottom-left-radius: var(--primary-border-radius);
 }
 input#search:focus {
   color: var(--black);
@@ -161,7 +160,6 @@ nav .nav__link {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  font-weight: 500;
   cursor: pointer;
 }
 nav .nav__link a,
@@ -202,7 +200,6 @@ footer {
   padding: 5px 15px;
   margin: auto;
   text-align: center;
-  color: var(--gray-70);
   background-color: var(--white);
   border-radius: 0px 0px 6px 6px;
   transform: translate(-50%, 0px);
@@ -225,21 +222,49 @@ footer {
   line-height: 24px;
   font-weight: 700;
 }
-.login input,
-.register input {
+.login > input,
+.register > input {
   padding: 15px;
   border-radius: var(--primary-border-radius);
   border: 1px solid #cccccc;
   color: rgb(75, 71, 71);
 }
-.login input:focus,
-.register input:focus {
+.login > input:focus,
+.register > input:focus {
   border: 2px solid var(--cyan-70);
+}
+.login .pw-container,
+.register .pw-container {
+  color: rgb(75, 71, 71);
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  font-size: 1.5rem;
+  border-radius: var(--primary-border-radius);
+  width: 100%;
+}
+.login .pw-container input,
+.register .pw-container input {
+  padding: 15px;
+  width: 100%;
+  border-radius: var(--primary-border-radius);
+  border: var(--input-border);
+}
+.login .pw-container input:focus,
+.register .pw-container input:focus {
+  border: 2px solid var(--cyan-70);
+}
+.login .pw-container .password--type,
+.register .pw-container .password--type {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .login input ~ p,
 .register input ~ p {
   display: none;
-  color: rgb(212, 127, 127);
+  color: var(--error);
   font-size: 13px;
 }
 .login button,
@@ -316,26 +341,19 @@ footer {
   grid-template-columns: repeat(auto-fit, 270px);
   gap: 30px;
   padding: 55px 15px;
-  margin: auto;
+  margin-inline: auto;
 }
 
 .card {
   width: 270px;
 }
-.card:first-child:hover {
-  box-shadow: 0.5px 0.5px 0px rgba(0, 0, 0, 0.2);
-}
-.card:not(:first-child):hover {
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-}
 .card:hover {
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
   transform: translateX(5px) translateY(-10px) scale(1.05);
   overflow: hidden;
 }
-.card:focus {
-  box-shadow: none;
-  outline: var(--cyan-50) dotted 2px;
-  outline-offset: 0.05em;
+.card:first-child:hover {
+  box-shadow: 0.5px 0.5px 0px rgba(0, 0, 0, 0.2);
 }
 .card .card__content {
   position: relative;
@@ -344,6 +362,7 @@ footer {
   height: 197px;
   background-position: center;
   background-size: cover;
+  border-radius: calc(var(--primary-border-radius) * 2) calc(var(--primary-border-radius) * 2) 0px 0px;
 }
 .card .card__content .card__title {
   position: absolute;
@@ -357,6 +376,8 @@ footer {
   line-height: 17.5px;
   background-color: rgba(0, 0, 0, 0.6);
   color: var(--white);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
 }
 .card .card__info {
   display: flex;
@@ -366,7 +387,7 @@ footer {
   gap: 4px;
   box-shadow: 1px 1px rgba(0, 0, 0, 0.2);
   color: var(--gray-50);
-  border-radius: 0px 0px var(--primary-border-radius) --primary-border-radius;
+  border-radius: 0px 0px calc(var(--primary-border-radius) * 2) calc(var(--primary-border-radius) * 2);
 }
 .card .card__info span {
   display: flex;
@@ -444,7 +465,7 @@ footer {
     color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
-    background-image: url(../images/welcome.png);
+    background-image: url(../images/welcome.webp);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -477,19 +498,22 @@ footer {
 }
 .attraction {
   display: flex;
-  margin: auto;
+  margin-inline: auto;
   justify-content: center;
   width: min(100% - 25px, 1200px);
+  min-height: calc(100vh - 269px);
   gap: 30px;
   padding-top: 37px;
   scrollbar-width: thin;
 }
 .attraction .carousel {
+  display: none;
   position: relative;
   margin: auto;
   width: 540px;
   height: 406px;
   overflow: hidden;
+  border-radius: var(--primary-border-radius);
 }
 .attraction .carousel .carousel__radios {
   position: relative;
@@ -514,7 +538,6 @@ footer {
 }
 .attraction .carousel .carousel__item {
   display: none;
-  width: 100%;
   height: 100%;
   background-size: cover;
   background-position: center;
@@ -530,7 +553,7 @@ footer {
   mix-blend-mode: overlay;
 }
 .attraction .carousel .carousel__item--visible {
-  display: flex;
+  display: block;
 }
 .attraction .carousel .carousel__actions {
   position: relative;
@@ -539,7 +562,7 @@ footer {
   display: flex;
   justify-content: space-between;
   margin: auto;
-  background-color: black;
+  background-color: var(--black);
   transform: translateY(-50%);
 }
 .attraction .carousel .carousel__actions button {
@@ -561,11 +584,10 @@ footer {
   transform: rotateY(180deg);
 }
 .attraction .attraction_info {
-  display: grid;
+  display: none;
   grid-template-columns: 1fr;
   gap: 15px;
   width: 600px;
-  color: var(--gray-70);
 }
 .attraction .attraction_info .booking_container {
   display: flex;
@@ -576,7 +598,7 @@ footer {
   gap: 15px;
   line-height: 23px;
   background-color: var(--gray-20);
-  border-radius: 5px;
+  border-radius: var(--primary-border-radius);
 }
 .attraction .attraction_info .booking_container p {
   font-weight: 700;
@@ -585,8 +607,9 @@ footer {
   position: relative;
   max-height: 35px;
 }
-.attraction .attraction_info .booking_container .booking_date p {
+.attraction .attraction_info .booking_container .booking_date label {
   display: inline-flex;
+  font-weight: 700;
 }
 .attraction .attraction_info .booking_container .booking_date input[type=date] {
   width: 149px;
@@ -601,13 +624,8 @@ footer {
 }
 .attraction .attraction_info .booking_container .booking_time {
   display: flex;
-}
-.attraction .attraction_info .booking_container .booking_time p {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: auto 0;
-  border: 2px solid transparent;
+  max-height: 35px;
+  gap: 5px;
 }
 .attraction .attraction_info .booking_container .booking_time .firstHalf,
 .attraction .attraction_info .booking_container .booking_time .secondHalf {
@@ -615,6 +633,14 @@ footer {
   align-items: center;
   margin-right: 18px;
   gap: 6px;
+}
+.attraction .attraction_info .booking_container .booking_time .firstHalf ~ label,
+.attraction .attraction_info .booking_container .booking_time .secondHalf ~ label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0;
+  border: 2px solid transparent;
 }
 .attraction .attraction_info .booking_container .booking_time .firstHalf input[type=radio],
 .attraction .attraction_info .booking_container .booking_time .secondHalf input[type=radio] {
@@ -630,10 +656,6 @@ footer {
 .attraction .attraction_info .booking_container .booking_time .firstHalf input[type=radio]:checked,
 .attraction .attraction_info .booking_container .booking_time .secondHalf input[type=radio]:checked {
   background-color: var(--cyan-70);
-}
-.attraction .attraction_info .booking_container .booking_time .firstHalf input[type=radio] ~ p,
-.attraction .attraction_info .booking_container .booking_time .secondHalf input[type=radio] ~ p {
-  font-weight: 500;
 }
 .attraction .attraction_info .booking_container .attraction_fee {
   display: flex;
@@ -685,7 +707,7 @@ footer {
 }
 
 .attraction_container {
-  display: flex;
+  display: none;
   flex-direction: column;
   width: min(100% - 45px, 1180px);
   margin: auto;
@@ -694,7 +716,6 @@ footer {
   text-align: justify;
   font-weight: 400;
   line-height: 25px;
-  color: var(--gray-70);
 }
 
 hr {
@@ -762,7 +783,7 @@ hr {
   padding-inline: 5px;
   font-size: inherit;
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
-  color: rgb(189, 95, 95);
+  color: var(--cyan-50);
   cursor: pointer;
 }
 
@@ -806,18 +827,6 @@ iframe {
   display: grid;
   grid-template-columns: 1fr;
 }
-.modal__redirect__content::before {
-  content: "訂購成功";
-  display: inline-block;
-  z-index: 100;
-  position: absolute;
-  font-size: 19px;
-  color: var(--black);
-  opacity: 0.7;
-  letter-spacing: 0.8em;
-  inset: 45% calc(50% - 6px) auto auto;
-  transform: translateX(50%);
-}
 .modal__redirect__content img {
   width: 100%;
   height: 100%;
@@ -857,14 +866,13 @@ iframe {
   position: relative;
   display: flex;
   flex-direction: column;
-  margin: auto;
+  margin-inline: auto;
   align-items: center;
-  width: 100%;
   min-height: calc(100vh - 54px);
   color: var(--white);
   background-color: var(--gray-70);
 }
-.order .order__checkout {
+.order__checkout {
   display: flex;
   align-items: flex-end;
   flex-direction: column;
@@ -876,7 +884,7 @@ iframe {
   color: var(--gray-70);
   background-color: var(--white);
 }
-.order .order__checkout #order__checkout__btn {
+.order__checkout #order__checkout__btn {
   padding: 10px 20px;
   border-radius: var(--primary-border-radius);
   font-size: 19px;
@@ -896,13 +904,13 @@ iframe {
   background-color: var(--gray-20);
   margin: auto;
 }
-.order .order__booking {
+.order__booking {
   width: 100%;
   background-color: var(--white);
   display: flex;
   flex-direction: column;
 }
-.order .order__booking .order__booking__empty {
+.order__booking .order__booking__empty {
   padding-bottom: 40px;
   color: var(--gray-70);
   width: 1000px;
@@ -910,7 +918,7 @@ iframe {
   display: flex;
   margin: auto;
 }
-.order .order__booking .order__booking__headline {
+.order__booking .order__booking__headline {
   padding-block: 46px 35px;
   height: 16px;
   width: 1000px;
@@ -921,7 +929,7 @@ iframe {
   color: var(--gray-70);
   background-color: var(--white);
 }
-.order .order__booking .order__booking__attraction {
+.order__booking .order__booking__attraction {
   display: flex;
   flex-direction: column;
   width: 1000px;
@@ -929,7 +937,7 @@ iframe {
   margin: auto;
   gap: 20px;
 }
-.order .order__booking .order__booking__attraction .order__booking__attraction__item {
+.order__booking .order__booking__attraction .order__booking__attraction__item {
   color: var(--gray-70);
   background-color: var(--white);
   min-height: 200px;
@@ -938,21 +946,28 @@ iframe {
   gap: 40px;
   padding: 20px 0px;
 }
-.order .order__booking .order__booking__attraction .order__booking__attraction__item figure {
+.order__booking .order__booking__attraction .order__booking__attraction__item figure {
   width: 250px;
   height: 200px;
   min-width: 200px;
   padding-inline: 8px;
+  border-radius: calc(var(--primary-border-radius) * 2);
 }
-.order .order__booking .order__booking__attraction .order__booking__attraction__item figure img {
+.order__booking .order__booking__attraction .order__booking__attraction__item figure:hover {
+  filter: contrast(120%) sepia(30%);
+  transform: translateX(-5px) translateY(-20px);
+}
+.order__booking .order__booking__attraction .order__booking__attraction__item figure img {
   width: 100%;
   height: 100%;
+  border-radius: calc(var(--primary-border-radius) * 2);
   -o-object-fit: cover;
      object-fit: cover;
   -o-object-position: center;
      object-position: center;
+  background-color: var(--gray-20);
 }
-.order .order__booking .order__booking__attraction .order__booking__attraction__item section {
+.order__booking .order__booking__attraction .order__booking__attraction__item .section {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -961,7 +976,7 @@ iframe {
   height: 200px;
   padding-top: 5px;
 }
-.order .order__booking .order__booking__attraction .order__booking__attraction__item section #order__booking--delect {
+.order__booking .order__booking__attraction .order__booking__attraction__item .section .order__booking__btn--delect {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -970,22 +985,22 @@ iframe {
   background-color: transparent;
   background-image: url(../images/icon_delete.png);
 }
-.order .order__booking .order__booking__attraction .order__booking__attraction__item section h2 {
+.order__booking .order__booking__attraction .order__booking__attraction__item .section h2 {
   font-size: 16px;
   line-height: 13px;
   color: var(--cyan-70);
   font-weight: 700;
   padding-bottom: 10px;
 }
-.order .order__booking .order__booking__attraction .order__booking__attraction__item section .booking__attraction__info {
+.order__booking .order__booking__attraction .order__booking__attraction__item .section .booking__attraction__info {
   display: flex;
   gap: 5px;
 }
-.order .order__booking .order__booking__attraction .order__booking__attraction__item section .booking__attraction__info dt {
+.order__booking .order__booking__attraction .order__booking__attraction__item .section .booking__attraction__info dt {
   min-width: 50px;
   font-weight: 700;
 }
-.order .order__booking .order__booking__attraction .order__booking__attraction__item section .booking__attraction__info dl {
+.order__booking .order__booking__attraction .order__booking__attraction__item .section .booking__attraction__info dd {
   word-wrap: break-word;
   line-height: 1.1;
 }
@@ -999,8 +1014,8 @@ iframe {
   color: var(--gray-70);
   background-color: var(--white);
 }
-.order .order__contact h2,
-.order .order__creditcard h2 {
+.order .order__contact > h2,
+.order .order__creditcard > h2 {
   width: min(100% - 100px, 1000px);
   margin: 0 auto;
   font-size: 19px;
@@ -1024,12 +1039,21 @@ iframe {
   place-items: center;
 }
 .order .order__contact .booking__contact__info input,
-.order .order__creditcard .booking__contact__info input {
+.order .order__contact .booking__contact__info .tpfield,
+.order .order__creditcard .booking__contact__info input,
+.order .order__creditcard .booking__contact__info .tpfield {
   width: 180px;
   height: 18px;
   padding: 10px;
-  border: 1px solid var(--gray-20);
+  border: 1px solid var(--gray-70);
   border-radius: var(--primary-border-radius);
+}
+
+#contact__name--err,
+#contact__phone--err,
+#contact__email--err {
+  color: var(--error);
+  padding-left: 80px;
 }
 
 @media screen and (max-width: 1000px) {
@@ -1046,7 +1070,7 @@ iframe {
     width: calc(100% - 102px);
     justify-content: space-around;
   }
-  .order .order__booking .order__booking__attraction .order__booking__attraction__item section {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item .section {
     width: calc(100% - 288px);
   }
   .order__contact h2,
@@ -1079,7 +1103,7 @@ iframe {
     width: calc(100% - 41px);
     padding-inline: 25px;
   }
-  .order .order__booking .order__booking__attraction .order__booking__attraction__item section {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item .section {
     width: 450px;
   }
   .order__contact h2,
@@ -1129,16 +1153,16 @@ iframe {
     padding: 28px 15px;
     margin: auto;
   }
-  .order .order__booking .order__booking__attraction .order__booking__attraction__item section {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item .section {
     position: relative;
     width: calc(100% - 20px);
   }
-  .order .order__booking .order__booking__attraction .order__booking__attraction__item section #order__booking--delect {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item .section .order__booking__btn--delect {
     position: absolute;
     top: auto;
     bottom: -15px;
   }
-  .order .order__booking .order__booking__attraction .order__booking__attraction__item section h2 {
+  .order .order__booking .order__booking__attraction .order__booking__attraction__item .section h2 {
     width: 100%;
   }
 }
@@ -1152,4 +1176,44 @@ iframe {
     padding: 28px 0px;
     height: 200px;
   }
+}
+.thankyou {
+  min-height: calc(100vh - 158px);
+  padding-top: 54px;
+  background-image: url(../images/thx.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat space;
+  filter: contrast(80%) saturate(50%);
+  display: grid;
+  place-items: center;
+}
+.thankyou section {
+  margin: auto;
+  display: grid;
+  place-content: center;
+  width: 100%;
+  gap: 20px;
+}
+.thankyou section h1,
+.thankyou section h3 {
+  text-align: center;
+  font-size: 20px;
+}
+.thankyou section h1 {
+  font-size: 25px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(36, 35, 35);
+  -webkit-text-fill-color: transparent;
+  transition: transform 0.8s ease-in-out;
+  cursor: -webkit-grab;
+  cursor: grab;
+  scale: 1;
+}
+.thankyou section h1:hover {
+  transform: translateY(-20px) scale(1.5);
+}
+.thankyou section h3 {
+  color: var(--black);
+  font-weight: 500;
 }/*# sourceMappingURL=style.css.map */

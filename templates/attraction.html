@@ -1,5 +1,5 @@
-{% extends "base.html" %} {%block title%}台北一日遊 | 景點頁面 {%endblock%} {%
-block scripts %}
+{% extends "base.html" %} {%block title%}台北一日遊 | 景點頁面 {%endblock%}
+{%block scripts %}
 <script
   src="{{ url_for('static', filename='js/attraction.js') }}"
   defer
@@ -13,8 +13,8 @@ block scripts %}
     <div class="booking_container">
       <p>訂購導覽行程</p>
       <span>以此景點為中心的一日行程，帶您探索城市角落故事</span>
-      <label for="booking_date" class="booking_date"
-        ><p>選擇日期：</p>
+      <div class="booking_date">
+        <label for="booking_date">選擇日期：</label>
         <input
           id="booking_date"
           type="date"
@@ -24,7 +24,7 @@ block scripts %}
           autocomplete="off"
           required
         />
-      </label>
+      </div>
       <div
         class="booking_time"
         role="radiogroup"
@@ -32,13 +32,13 @@ block scripts %}
       >
         <p>選擇時間：</p>
         <div class="firstHalf">
-          <input id="firstHalf__radio" type="radio" name="firstHalf" checked />
-          <p>上半天</p>
+          <input id="firstHalf__radio" type="radio" name="morning" checked />
+          <label for="firstHalf__radio">上半天</label>
         </div>
 
         <div class="secondHalf">
-          <input type="radio" name="secondHalf" id="secondHalf__radio" />
-          <p>下半天</p>
+          <input type="radio" name="afternoon" id="secondHalf__radio" />
+          <label for="secondHalf__radio">下半天</label>
         </div>
       </div>
       <div class="attraction_fee">
@@ -58,6 +58,8 @@ block scripts %}
     src="/static/images/close.png"
     alt="modal_close"
     onclick="modalClose()"
+    aria-label="Close"
+    role="button"
   />
 </dialog>
 <dialog class="modal" id="modal__redirect">
@@ -65,9 +67,11 @@ block scripts %}
     class="modal__redirect--close"
     src="/static/images/close.png"
     alt="close redirect modal"
+    aria-label="Close"
+    role="button"
   />
   <div class="modal__redirect__content">
-    <img src="../static/images/bookingsucess.png" alt="" />
+    <img src="../static/images/bookingsucess.webp" alt="" />
     <div class="modal__redirect__group">
       <a href="/">訂購更多</a> <a href="/booking">前往結帳</a>
     </div>

@@ -1,6 +1,13 @@
-{% extends "base.html" %} {%block title%}台北一日遊 | 預定行程 {%endblock%} {%
-block scripts %}
+{% extends "base.html" %} {%block title%}台北一日遊 | 預定行程 {%endblock%}
+<!-- {%block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/booking/booking.css') }}"
+/>
+{%endblock%}  -->
+{% block scripts %}
 <script src="{{ url_for('static', filename='js/booking.js') }}" defer></script>
+<script src="https://js.tappaysdk.com/tpdirect/v5.1.0"></script>
 {%endblock%}{% block content %}
 <div class="hr"></div>
 
@@ -38,39 +45,27 @@ block scripts %}
     </p>
   </section>
   <div class="booking__hr"></div>
+
   <section class="order__creditcard">
     <div class="booking__contact__info">
       <label for="booking__creditcard__num">卡片密碼:</label>
-      <input
-        type="tel"
-        id="booking__creditcard__num"
-        placeholder="**** **** **** ****"
-        autocomplete="cc-number"
-      />
+      <div class="tpfield" id="card-number"></div>
     </div>
     <div class="booking__contact__info">
       <label for="booking__creditcard__exp">過期時間:</label>
-      <input
-        type="password"
-        id="booking__creditcard__exp"
-        placeholder="MM/YY"
-        autocomplete="cc-exp"
-      />
+      <div class="tpfield" id="card-expiration-date"></div>
     </div>
     <div class="booking__contact__info">
       <label for="booking__creditcard__cvv">驗證密碼:</label>
-      <input
-        type="password"
-        id="booking__contact__info__cvv"
-        placeholder="CVW"
-        autocomplete="cc-csc"
-      />
+      <div class="tpfield" id="card-ccv"></div>
     </div>
   </section>
   <div class="booking__hr"></div>
   <section class="order__checkout">
     <p id="order__checkout__value"></p>
-    <button id="order__checkout__btn">確認訂購並付款</button>
+    <button id="order__checkout__btn" onclick="onClick()">
+      確認訂購並付款
+    </button>
   </section>
   <footer><p>COPYRIGHT © 2022 台北一日遊</p></footer>
 </main>

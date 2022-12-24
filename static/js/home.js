@@ -3,9 +3,6 @@ const searchMenu = document.querySelector(".search__menu");
 const homeMainEl = document.querySelector(".home__main");
 const searchBtn = document.querySelector("#search__btn");
 
-//看偽元素的style
-// const beforeLoginEl = window.getComputedStyle(loginEl, "::before");
-
 searchEl.addEventListener("click", () => {
   searchMenu.classList.toggle("active");
   transparentOverlayEl.classList.toggle("active");
@@ -82,7 +79,7 @@ const fetchAttractionList = async () => {
   const data = result.data;
 
   nextPage = result.nextPage;
-  data?.map((attraction) => {
+  data?.map((attraction, i) => {
     renderAttractionDOM(attraction);
   });
 };

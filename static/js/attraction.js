@@ -40,15 +40,14 @@ function renderInfoDOM(data) {
   const addTitle = document.createElement("h4");
   const addText = document.createElement("p");
   const mapIcon = document.createElement("span");
+  mapIcon.classList.add("material-symbols-outlined", "addMap");
+  mapIcon.textContent = "location_on";
 
   addTitle.textContent = "景點地址： ";
   addText.textContent = data.address;
-  mapIcon.setAttribute("class", "material-symbols-outlined");
-  mapIcon.textContent = "location_on";
-
+  addText.appendChild(mapIcon);
   addressContainer.appendChild(addTitle);
   addressContainer.appendChild(addText);
-  addText.appendChild(mapIcon);
   attractionContainer.appendChild(descEl);
   attractionContainer.appendChild(addressContainer);
 
@@ -82,6 +81,9 @@ function renderInfoDOM(data) {
     const attractionEl = document.createElement("div");
     attractionEl.setAttribute("class", "carousel__item");
     attractionEl.setAttribute("style", `  background-image: url(${img});`);
+    const attractionImg = document.createElement("image");
+    attractionImg.setAttribute("src", img);
+    attractionEl.appendChild(attractionImg);
     const attractionRadio = document.createElement("div");
     attractionRadio.setAttribute("class", "carousel__radios__radio");
 
@@ -96,28 +98,43 @@ function renderInfoDOM(data) {
   carouselEl.appendChild(attractionRadioContainer);
 }
 
+function renderAttractionNotFoundDOM() {
+  const notfoundEl = document.createElement("div");
+  notfoundEl.setAttribute("class", "attraction__notfound ");
+  notfoundEl.textContent = "查無此景點ID";
+  attractionMainEl.appendChild(notfoundEl);
+}
+
 async function fetchAttractionInfo() {
   try {
     const response = await fetch(`${originUrl}/api/attraction/${id}`);
     const result = await response.json();
     const data = result?.data;
     if (typeof data == "string") {
-      carouselEl.remove();
-      attractionInfo.remove();
-      attractionContainer.remove();
-      const notfoundEl = document.createElement("div");
-      notfoundEl.setAttribute("class", "attraction__notfound ");
-      notfoundEl.textContent = "查無此景點ID";
-      // attractionMainEl.style.background = "var(--LightCyanGradient)";
-      attractionMainEl.appendChild(notfoundEl);
+      renderAttractionNotFoundDOM();
       return;
     }
+    attractionInfo.style.display = "grid";
+    attractionContainer.style.display = "flex";
+    carouselEl.style.display = "block";
     renderInfoDOM(data);
+    document.querySelector(".addMap").addEventListener("click", function () {
+      modalEl.showModal();
+    });
     let slidePosition = 0;
-
     const slides = document.getElementsByClassName("carousel__item");
     const totalSlides = slides.length;
     const radios = document.querySelectorAll(".carousel__radios__radio ");
+    document
+      .getElementById("carousel__button--next")
+      .addEventListener("click", function () {
+        moveToNextSlide();
+      });
+    document
+      .getElementById("carousel__button--prev")
+      .addEventListener("click", function () {
+        moveToPrevSlide();
+      });
 
     radios.forEach((radio, i) => {
       radio.addEventListener("click", () => {
@@ -158,22 +175,6 @@ async function fetchAttractionInfo() {
       slidePosition--;
       updateSlidePosition();
     }
-
-    document
-      .getElementById("carousel__button--next")
-      .addEventListener("click", function () {
-        moveToNextSlide();
-      });
-    document
-      .getElementById("carousel__button--prev")
-      .addEventListener("click", function () {
-        moveToPrevSlide();
-      });
-    document
-      .querySelector(".material-symbols-outlined")
-      .addEventListener("click", function () {
-        modalEl.showModal();
-      });
   } catch (e) {
     console.log(e);
   }
@@ -213,7 +214,7 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
     return;
   }
 
-  const priceReg = new RegExp(/[0-9]{4}/);
+  const priceReg = new RegExp(/[0-9]{4,}/);
   const price = document
     .querySelector(".attraction_fee")
     .childNodes[1].textContent.match(priceReg)[0];
@@ -241,28 +242,6 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
     redirectModel.showModal();
   });
 });
-
-// function createBooking(id, bookingDate, bookingTime, price) {
-//   fetch(
-//     `${originUrl}/api/booking`,
-//     {
-//       method: "Post",
-//       headers: {
-//         Accept: "application/json",
-//         "Content-type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         attractionId: id,
-//         bookingDate: bookingDate,
-//         bookingTime: bookingTime,
-//         price: price,
-//       }),
-//     }.then(function (response) {
-//       console.log(response);
-//     })
-//   );
-// }
-
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth() + 1;
 const currentDate = new Date().getDate() + 1;

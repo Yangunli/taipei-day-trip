@@ -1,11 +1,12 @@
 from mysql.connector import pooling, Error
 import mysql.connector  
-from flask import Flask, render_template,request,jsonify,make_response,Blueprint
+from flask import Flask, render_template,request,jsonify,make_response,Blueprint,json
 from flask_jwt_extended import create_access_token, jwt_required,JWTManager, get_jwt_identity,create_refresh_token
-from datetime import timedelta,datetime
+from datetime import timedelta,datetime,date
 from flask_bcrypt import Bcrypt
 import re
 import os
+import requests
 from dotenv import load_dotenv
 load_dotenv()
 app=Flask(__name__,instance_relative_config=True)
@@ -25,7 +26,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7)
 
 
 dbconfig = {'user':os.getenv("MYSQL_USER"), 'password':os.getenv("MYSQL_PW"),'database':os.getenv("MYSQL_DB")}
-cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30,host="0.0.0.0", **dbconfig)
+cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30 , host="0.0.0.0", **dbconfig)
 
 
 
@@ -45,8 +46,8 @@ def booking():
 	return render_template("booking.html")
 
 
-@app.route("/thankyou")
-def thankyou():
+@app.route("/thankyou/<order_id>")
+def thankyou(order_id):
 	return render_template("thankyou.html")
 
 
@@ -73,9 +74,10 @@ def get_attraction_by_KW():
 		if(search_result):
 			count=0
 			for attraction in search_result:
-				images=attraction[-1].split(",")[:-1]
-				result={"id": attraction[0],"name":attraction[1],"category": attraction[2],"description": attraction[3],
-				"address": attraction[4],"transport": attraction[5],"mrt":attraction[-4],"lat": attraction[-3],"lng":attraction[-2],
+				(id, name, category, description, address, transport, mrt , lat, lng , images_list)=attraction
+				images=images_list.split(",")[:-1]
+				result={"id": id,"name":name,"category": category,"description": description,
+				"address": address,"transport":transport,"mrt":mrt,"lat": lat,"lng":lng,
 				"images": images}
 				data.append(result)
 				count=count+1
@@ -183,7 +185,7 @@ def register():
 
 
 
-@app.route("/api/user/auth" , methods=["GET"])
+@app.route("/api/user/auth" )
 @jwt_required(locations=["headers"])
 def member():	
 	current_user = get_jwt_identity()
@@ -218,8 +220,6 @@ def login():
 	email_regex = re.search(r'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$', email)
 	password_regex = re.search(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,12}', password)
 
-
-	
 	if email_regex and password_regex:
 		connection = cnxpool.get_connection()
 		mycursor=connection.cursor()
@@ -265,6 +265,7 @@ def logout():
 
 @app.route("/api/booking")
 @jwt_required(locations=["headers"])
+
 def get_booking_info():
 	user_id = get_jwt_identity()
 	result={}
@@ -273,28 +274,20 @@ def get_booking_info():
 		connection = cnxpool.get_connection()
 		mycursor=connection.cursor()
 		try:
-			
-			mycursor.execute("select attractions.id,name,address,images,booking_date,booking_time,price,bookings.id from bookings inner join attractions on bookings.attraction_id = attractions.id where user_id=%(user_id)s", {"user_id":user_id}) 
+			mycursor.execute("select attractions.id,name,address,images,booking_date,booking_time,price,bookings.id from bookings inner join attractions on bookings.attraction_id = attractions.id where user_id=%(user_id)s and payment=0", {"user_id":user_id}) 
 			search_result=mycursor.fetchall()
-			
-			
-			
 			if(search_result):
 				data=[]
 				for booking in search_result:
-
 					attraction={}
 					attraction_id=booking[0]
 					attraction_name=booking[1]
 					attraction_address=booking[2]
 					attraction_image=booking[3].split(",")[:-1][0]
 					attraction.update({"id":attraction_id,"name":attraction_name, "address":attraction_address,"image":attraction_image})
-					booking={"orderId":booking[-1],"attraction":attraction,"date":booking[-4],"time":booking[-3],"price":booking[-2]}  
-					data.append(booking)
-			
+					booking={"bookingId":booking[-1],"attraction":attraction,"date":booking[-4],"time":booking[-3],"price":booking[-2]}  
+					data.append(booking)			
 				result.update({"data":data})
-				
-			
 				return result,200
 			else:
 				result={"data":None}  
@@ -312,6 +305,7 @@ def get_booking_info():
 	else:
 		result={"error":True,"message":"403 Forbidden"}  
 		return result,403
+
 
 
 
@@ -359,13 +353,15 @@ def create_booking():
 @jwt_required(locations=["headers"])
 def cancel_booking():
 	user_id = get_jwt_identity()
-	order_id=request.json.get("orderId", None)
+	booking_id=request.json.get("bookingId", None)
 	if user_id:
 		connection = cnxpool.get_connection()
 		mycursor=connection.cursor()
+		mycursor.execute("select  from bookings where user_id=%(user_id)s and payment=0 ", {"user_id":user_id}) 
 		try:
 
-			mycursor.execute("delete from bookings where id=%(order_id)s and payment=0 ",{"order_id":order_id,}) 
+			mycursor.execute("delete from bookings where id=%(booking_id)s and payment=0 ",{"booking_id":booking_id,}) 
+			print(booking_id)
 			connection.commit()
 			result={"ok":True}  
 			return result,200
@@ -384,12 +380,133 @@ def cancel_booking():
 	
 
 @app.route("/api/orders", methods=["POST"])
-def get_booking_payment():
-	pass
+@jwt_required(locations=["headers"])
+def checkout__order():
+	user_id = get_jwt_identity()
+	today=datetime.now()
+	datetime_str = datetime.strftime(today,'%Y-%m-%d %H:%M:%S')
+	order_id=int(str(user_id)+datetime_str.replace("-","").replace(":","").replace(" ","")[2:]) 
+	prime=request.json.get("prime", None)
+	totalPrice=request.json.get("totalPrice", None)
+	order=request.json.get("order", None)  
+	contact_info= request.json.get("contact", None)
+	(contact_name,contact_email,contact_phone)=tuple(contact_info.values())  
 
-@app.route("/api/order/<orderNumber>")
-def get_order_info(order_number):
-	pass
+
+	frontend_data_str=""
+	for order_data in order:		
+		frontend_data_str+=order_data["trip"]["attraction"]["id"]+order_data["trip"]["date"]+order_data["trip"]["time"]
+
+	if user_id :
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
+		
+		mycursor.execute("select id,attraction_id,booking_date,booking_time,price from bookings  where user_id=%(user_id)s and  payment=0 ",{"user_id":user_id}) 
+		search_result=mycursor.fetchall()
+		total_price=0
+		backend_data_str=""
+		for booking in search_result:
+			( _,attraction_id,booking_date,booking_time,price)=booking
+			total_price+=int(price)
+			backend_data_str+=str(attraction_id)+booking_date+booking_time
+
+		if( frontend_data_str ==backend_data_str and total_price==int(totalPrice)):
+			try:
+				mycursor.execute("update bookings set payment=%(order_id)s  where user_id=%(user_id)s and  payment=0 ",{"user_id":user_id, "order_id":order_id}) 
+				connection.commit()
+				mycursor.execute("insert into orderInfos(id, name,email,phone,total_price) values(%(order_id)s,%(contact_name)s,%(contact_email)s,%(contact_phone)s,%(total_price)s)",{"order_id":order_id, "contact_name":contact_name,"contact_email":contact_email,"contact_phone":contact_phone,"total_price":total_price}) 
+				connection.commit()
+				url = 'https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime'
+				headers = {"x-api-key": os.getenv("TAPPAY_PARENT_KEY"), "Content-Type": "application/json"}
+				order_info_dict={"prime": prime,"partner_key":os.getenv("TAPPAY_PARENT_KEY") ,"merchant_id": "yangun410_TAISHIN","details":"台北一日遊","amount": total_price,"cardholder": {"phone_number": contact_phone,"name":contact_name,"email": contact_email,"zip_code": "","address": "","national_id": ""},"remember": True}
+				order_info_dict = json.dumps(order_info_dict) 
+				order_info_dict = order_info_dict.encode("utf-8")
+				r = requests.post(url, headers=headers, data= order_info_dict)
+				# print(r.text)
+				status=json.loads(r.text)["status"]
+				if status==0 :
+					try:
+						mycursor.execute("update orderInfos set status='付款成功'  where id=%(order_id)s  ",{"user_id":user_id, "order_id":order_id}) 
+						connection.commit()
+						data={"number":order_id,"payment":{"status":status,"message":"付款成功"}}
+						result={"data": data}
+						return result,200
+
+					except Error as e:
+						print(e)
+						result={"error":True,"message":"500 Internal Server Error"}  
+						return result,500
+				else:
+					result={"error":json.loads(r.text)["msg"]}  
+					return result,400
+			except Error as e:
+				print(e)
+				result={"error":True,"message":"500 Internal Server Error"}  
+				return result,500
+			finally:
+				mycursor.close()
+				connection.close()
+		else:
+			result={"error":"請勿竄改資料"}  
+			return result,400
+
+			
+	else:
+		result={"error":True,"message":"403 Forbidden"}  
+		return result,403	
+
+@app.route("/api/order/<number>")
+@jwt_required(locations=["headers"])
+def get_order_info(number):
+	order_id=number
+	user_id = get_jwt_identity()
+	result={}
+	print(len(number))
+	if user_id :
+		connection = cnxpool.get_connection()
+		mycursor=connection.cursor()
+		try:
+			mycursor.execute("select bookings.price, attractions.id,attractions.name,attractions.address,attractions.images,bookings.booking_date,bookings.booking_time,orderInfos.name,orderInfos.email,orderInfos.phone,orderInfos.status from bookings inner join  orderInfos on bookings.payment=orderInfos.id inner join  attractions on bookings.attraction_id=attractions.id where orderInfos.id=%(order_id)s  and bookings.user_id=%(user_id)s    " , {"user_id":user_id,"order_id":order_id })
+			search_result=mycursor.fetchall()
+			if(search_result):
+				data={"number":order_id}
+				attraction_list=[]
+				contact={}
+				for booking in search_result:
+					attraction={}
+					(booking_price,attraction_id,attraction_name,attraction_address,images,booking_date,booking_time,contact_name,contact_email,contact_phone,status)=booking
+					attraction_image=images.split(",")[:-1][0]
+					attraction.update({"id":attraction_id,"name":attraction_name, "address":attraction_address,"image":attraction_image})
+					booking={"trip":{"attraction":attraction},"date":booking_date,"time":booking_time,"price":booking_price} 
+					contact.update({"name":contact_name,"email":contact_email,"phone":contact_phone})
+					attraction_list.append(booking)
+					if status=="付款成功":
+						status_code=1
+					else:
+						status_code=-1
+				data.update({"orderList":attraction_list})
+				data.update({"contact": contact})
+				data.update({"status":status_code}) 
+				result={"data":data}
+				print(status,status_code,result)
+				return result,200
+			else:
+				result={"data":None}
+				print(result)  	
+				return result,200
+		
+		except Error as e:
+			print(e)
+			result={"error":True,"message":"500 Internal Server Error"}  
+			return result,500
+		finally:
+			mycursor.close()
+			connection.close()
+	
+	else:
+		result={"error":True,"message":"403 Forbidden"}  
+		return result,403
+
 
 if __name__ == "__main__":
     app.run(port=3000, host="0.0.0.0")
