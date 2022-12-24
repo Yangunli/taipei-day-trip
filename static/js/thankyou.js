@@ -12,7 +12,6 @@ async function fetchOrderInfo() {
     const result = await response.json();
     const data = result?.data;
     if (!data) {
-      console.log("你沒有這筆訂單唷~");
       document.querySelector("h1").textContent = "你沒有這筆訂單唷~";
       return;
     }
