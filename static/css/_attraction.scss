@@ -15,7 +15,6 @@
     width: 540px;
     height: 406px;
     overflow: hidden;
-    border-radius: var(--primary-border-radius);
   }
 
   .carousel .carousel__radios {
@@ -258,7 +257,7 @@ hr {
     scrollbar-width: thin;
   }
   .carousel {
-    width: min(calc(100%), 540px) !important;
+    width: min(100%, 540px) !important;
     height: 350px !important;
     margin: auto;
   }

@@ -121,20 +121,12 @@ async function fetchAttractionInfo() {
     document.querySelector(".addMap").addEventListener("click", function () {
       modalEl.showModal();
     });
+
     let slidePosition = 0;
+
     const slides = document.getElementsByClassName("carousel__item");
     const totalSlides = slides.length;
     const radios = document.querySelectorAll(".carousel__radios__radio ");
-    document
-      .getElementById("carousel__button--next")
-      .addEventListener("click", function () {
-        moveToNextSlide();
-      });
-    document
-      .getElementById("carousel__button--prev")
-      .addEventListener("click", function () {
-        moveToPrevSlide();
-      });
 
     radios.forEach((radio, i) => {
       radio.addEventListener("click", () => {
@@ -149,6 +141,17 @@ async function fetchAttractionInfo() {
       });
     });
 
+    document
+      .getElementById("carousel__button--next")
+      .addEventListener("click", function () {
+        moveToNextSlide();
+      });
+    document
+      .getElementById("carousel__button--prev")
+      .addEventListener("click", function () {
+        moveToPrevSlide();
+      });
+
     function updateSlidePosition() {
       for (let slide of slides) {
         slide.classList.remove("carousel__item--visible");
@@ -156,23 +159,27 @@ async function fetchAttractionInfo() {
       radios.forEach((radio) => {
         radio.style.backgroundColor = "var(--white)";
       });
-      slides[slidePosition].classList.add("carousel__item--visible");
       radios[slidePosition].style.backgroundColor = "var(--black)";
+      slides[slidePosition].classList.add("carousel__item--visible");
     }
 
     function moveToNextSlide() {
       if (slidePosition === totalSlides - 1) {
         slidePosition = 0;
+      } else {
+        slidePosition++;
       }
-      slidePosition++;
+
       updateSlidePosition();
     }
 
     function moveToPrevSlide() {
       if (slidePosition === 0) {
         slidePosition = totalSlides - 1;
+      } else {
+        slidePosition--;
       }
-      slidePosition--;
+
       updateSlidePosition();
     }
   } catch (e) {
