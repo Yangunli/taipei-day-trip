@@ -40,15 +40,14 @@ function renderInfoDOM(data) {
   const addTitle = document.createElement("h4");
   const addText = document.createElement("p");
   const mapIcon = document.createElement("span");
+  mapIcon.classList.add("material-symbols-outlined", "addMap");
+  mapIcon.textContent = "location_on";
 
   addTitle.textContent = "景點地址： ";
   addText.textContent = data.address;
-  mapIcon.setAttribute("class", "material-symbols-outlined");
-  mapIcon.textContent = "location_on";
-
+  addText.appendChild(mapIcon);
   addressContainer.appendChild(addTitle);
   addressContainer.appendChild(addText);
-  addText.appendChild(mapIcon);
   attractionContainer.appendChild(descEl);
   attractionContainer.appendChild(addressContainer);
 
@@ -78,11 +77,13 @@ function renderInfoDOM(data) {
   nextBtn.setAttribute("id", "carousel__button--next");
   actionContainer.appendChild(prevBtn);
   actionContainer.appendChild(nextBtn);
-
   images.map((img, i) => {
     const attractionEl = document.createElement("div");
     attractionEl.setAttribute("class", "carousel__item");
     attractionEl.setAttribute("style", `  background-image: url(${img});`);
+    const attractionImg = document.createElement("image");
+    attractionImg.setAttribute("src", img);
+    attractionEl.appendChild(attractionImg);
     const attractionRadio = document.createElement("div");
     attractionRadio.setAttribute("class", "carousel__radios__radio");
 
@@ -97,12 +98,29 @@ function renderInfoDOM(data) {
   carouselEl.appendChild(attractionRadioContainer);
 }
 
+function renderAttractionNotFoundDOM() {
+  const notfoundEl = document.createElement("div");
+  notfoundEl.setAttribute("class", "attraction__notfound ");
+  notfoundEl.textContent = "查無此景點ID";
+  attractionMainEl.appendChild(notfoundEl);
+}
+
 async function fetchAttractionInfo() {
   try {
     const response = await fetch(`${originUrl}/api/attraction/${id}`);
     const result = await response.json();
     const data = result?.data;
+    if (typeof data == "string") {
+      renderAttractionNotFoundDOM();
+      return;
+    }
+    attractionInfo.style.display = "grid";
+    attractionContainer.style.display = "flex";
+    carouselEl.style.display = "block";
     renderInfoDOM(data);
+    document.querySelector(".addMap").addEventListener("click", function () {
+      modalEl.showModal();
+    });
 
     let slidePosition = 0;
 
@@ -123,33 +141,6 @@ async function fetchAttractionInfo() {
       });
     });
 
-    function updateSlidePosition() {
-      for (let slide of slides) {
-        slide.classList.remove("carousel__item--visible");
-      }
-      radios.forEach((radio) => {
-        radio.style.backgroundColor = "var(--white)";
-      });
-      slides[slidePosition].classList.add("carousel__item--visible");
-      radios[slidePosition].style.backgroundColor = "var(--black)";
-    }
-
-    function moveToNextSlide() {
-      if (slidePosition === totalSlides - 1) {
-        slidePosition = 0;
-      }
-      slidePosition++;
-      updateSlidePosition();
-    }
-
-    function moveToPrevSlide() {
-      if (slidePosition === 0) {
-        slidePosition = totalSlides - 1;
-      }
-      slidePosition--;
-      updateSlidePosition();
-    }
-
     document
       .getElementById("carousel__button--next")
       .addEventListener("click", function () {
@@ -160,19 +151,39 @@ async function fetchAttractionInfo() {
       .addEventListener("click", function () {
         moveToPrevSlide();
       });
-    document
-      .querySelector(".material-symbols-outlined")
-      .addEventListener("click", () => {
-        modalEl.showModal();
+
+    function updateSlidePosition() {
+      for (let slide of slides) {
+        slide.classList.remove("carousel__item--visible");
+      }
+      radios.forEach((radio) => {
+        radio.style.backgroundColor = "var(--white)";
       });
+      radios[slidePosition].style.backgroundColor = "var(--black)";
+      slides[slidePosition].classList.add("carousel__item--visible");
+    }
+
+    function moveToNextSlide() {
+      if (slidePosition === totalSlides - 1) {
+        slidePosition = 0;
+      } else {
+        slidePosition++;
+      }
+
+      updateSlidePosition();
+    }
+
+    function moveToPrevSlide() {
+      if (slidePosition === 0) {
+        slidePosition = totalSlides - 1;
+      } else {
+        slidePosition--;
+      }
+
+      updateSlidePosition();
+    }
   } catch (e) {
     console.log(e);
-    carouselEl.remove();
-    attractionInfo.remove();
-    attractionContainer.remove();
-    const notfoundEl = document.createElement("div");
-    notfoundEl.setAttribute("class", "attraction__notfound ");
-    attractionMainEl.appendChild(notfoundEl);
   }
 }
 
@@ -182,9 +193,6 @@ const feeEl = document.querySelector(".attraction_fee");
 firstHalfEl.addEventListener("change", () => {
   secondHalfEl.checked = false;
   feeEl.childNodes[1].textContent = "新台幣 2000元";
-  if (firstHalfEl.checked) {
-    // console.log("hi~~~", firstHalfEl);
-  }
 });
 
 secondHalfEl.addEventListener("change", () => {
@@ -193,11 +201,8 @@ secondHalfEl.addEventListener("change", () => {
 });
 
 fetchAttractionInfo();
-
+// 用 new Date() < new Date(e.target.value) 比較日期
 const bookingDateEl = document.querySelector("#booking_date");
-bookingDateEl.addEventListener("input", (e) => {
-  // 用 new Date() < new Date(e.target.value) 比較日期
-});
 
 const dayReg = new RegExp(/\d{4}-\d{2}-\d{2}$/);
 
@@ -216,7 +221,7 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
     return;
   }
 
-  const priceReg = new RegExp(/[0-9]{4}/);
+  const priceReg = new RegExp(/[0-9]{4,}/);
   const price = document
     .querySelector(".attraction_fee")
     .childNodes[1].textContent.match(priceReg)[0];
@@ -224,7 +229,7 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
     document.querySelector("[type=radio]:checked").name === "firstHalf"
       ? "morning"
       : "afternoon";
-  document.querySelector("#booking_btn").disabled = false;
+
   const bookingDate = bookingDateEl.value;
   fetch(`${originUrl}/api/booking`, {
     method: "Post",
@@ -244,28 +249,6 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
     redirectModel.showModal();
   });
 });
-
-// function createBooking(id, bookingDate, bookingTime, price) {
-//   fetch(
-//     `${originUrl}/api/booking`,
-//     {
-//       method: "Post",
-//       headers: {
-//         Accept: "application/json",
-//         "Content-type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         attractionId: id,
-//         bookingDate: bookingDate,
-//         bookingTime: bookingTime,
-//         price: price,
-//       }),
-//     }.then(function (response) {
-//       console.log(response);
-//     })
-//   );
-// }
-
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth() + 1;
 const currentDate = new Date().getDate() + 1;
@@ -275,4 +258,4 @@ bookingDateEl.setAttribute(
   `${currentYear}-${currentMonth}-${currentDate}`
 );
 
-console.log(new Date().toLocaleString("en-CA-u-hc-h24").replace(",", ""));
+// console.log(new Date().toLocaleString("en-CA-u-hc-h24").replace(",", ""));

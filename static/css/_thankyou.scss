@@ -1,0 +1,40 @@
+.thankyou {
+  min-height: calc(100vh - 158px);
+  padding-top: 54px;
+  background-image: url(../images/thx.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat space;
+  filter: contrast(80%) saturate(50%);
+  display: grid;
+  place-items: center;
+  section {
+    margin: auto;
+    display: grid;
+    place-content: center;
+    width: 100%;
+    gap: 20px;
+
+    h1,
+    h3 {
+      text-align: center;
+      font-size: 20px;
+    }
+    h1 {
+      font-size: 25px;
+      color: transparent;
+      -webkit-text-stroke: 1px rgb(36, 35, 35);
+      -webkit-text-fill-color: transparent;
+      transition: transform 0.8s ease-in-out;
+      cursor: grab;
+      scale: 1;
+      &:hover {
+        transform: translateY(-20px) scale(1.5);
+      }
+    }
+    h3 {
+      color: var(--black);
+      font-weight: 500;
+    }
+  }
+}
