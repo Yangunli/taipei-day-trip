@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
   margin: 0px;
   padding: 0px;
@@ -498,16 +499,14 @@ footer {
 }
 .attraction {
   display: flex;
-  margin-inline: auto;
+  margin: auto;
   justify-content: center;
   width: min(100% - 25px, 1200px);
-  min-height: calc(100vh - 269px);
   gap: 30px;
   padding-top: 37px;
   scrollbar-width: thin;
 }
 .attraction .carousel {
-  display: none;
   position: relative;
   margin: auto;
   width: 540px;
@@ -537,6 +536,7 @@ footer {
 }
 .attraction .carousel .carousel__item {
   display: none;
+  width: 100%;
   height: 100%;
   background-size: cover;
   background-position: center;
@@ -552,7 +552,7 @@ footer {
   mix-blend-mode: overlay;
 }
 .attraction .carousel .carousel__item--visible {
-  display: block;
+  display: flex;
 }
 .attraction .carousel .carousel__actions {
   position: relative;
@@ -561,7 +561,7 @@ footer {
   display: flex;
   justify-content: space-between;
   margin: auto;
-  background-color: var(--black);
+  background-color: black;
   transform: translateY(-50%);
 }
 .attraction .carousel .carousel__actions button {
@@ -583,10 +583,11 @@ footer {
   transform: rotateY(180deg);
 }
 .attraction .attraction_info {
-  display: none;
+  display: grid;
   grid-template-columns: 1fr;
   gap: 15px;
   width: 600px;
+  color: var(--gray-70);
 }
 .attraction .attraction_info .booking_container {
   display: flex;
@@ -597,7 +598,7 @@ footer {
   gap: 15px;
   line-height: 23px;
   background-color: var(--gray-20);
-  border-radius: var(--primary-border-radius);
+  border-radius: 5px;
 }
 .attraction .attraction_info .booking_container p {
   font-weight: 700;
@@ -606,9 +607,8 @@ footer {
   position: relative;
   max-height: 35px;
 }
-.attraction .attraction_info .booking_container .booking_date label {
+.attraction .attraction_info .booking_container .booking_date p {
   display: inline-flex;
-  font-weight: 700;
 }
 .attraction .attraction_info .booking_container .booking_date input[type=date] {
   width: 149px;
@@ -623,8 +623,13 @@ footer {
 }
 .attraction .attraction_info .booking_container .booking_time {
   display: flex;
-  max-height: 35px;
-  gap: 5px;
+}
+.attraction .attraction_info .booking_container .booking_time p {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0;
+  border: 2px solid transparent;
 }
 .attraction .attraction_info .booking_container .booking_time .firstHalf,
 .attraction .attraction_info .booking_container .booking_time .secondHalf {
@@ -632,14 +637,6 @@ footer {
   align-items: center;
   margin-right: 18px;
   gap: 6px;
-}
-.attraction .attraction_info .booking_container .booking_time .firstHalf ~ label,
-.attraction .attraction_info .booking_container .booking_time .secondHalf ~ label {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: auto 0;
-  border: 2px solid transparent;
 }
 .attraction .attraction_info .booking_container .booking_time .firstHalf input[type=radio],
 .attraction .attraction_info .booking_container .booking_time .secondHalf input[type=radio] {
@@ -655,6 +652,10 @@ footer {
 .attraction .attraction_info .booking_container .booking_time .firstHalf input[type=radio]:checked,
 .attraction .attraction_info .booking_container .booking_time .secondHalf input[type=radio]:checked {
   background-color: var(--cyan-70);
+}
+.attraction .attraction_info .booking_container .booking_time .firstHalf input[type=radio] ~ p,
+.attraction .attraction_info .booking_container .booking_time .secondHalf input[type=radio] ~ p {
+  font-weight: 500;
 }
 .attraction .attraction_info .booking_container .attraction_fee {
   display: flex;
@@ -706,7 +707,7 @@ footer {
 }
 
 .attraction_container {
-  display: none;
+  display: flex;
   flex-direction: column;
   width: min(100% - 45px, 1180px);
   margin: auto;
@@ -715,6 +716,7 @@ footer {
   text-align: justify;
   font-weight: 400;
   line-height: 25px;
+  color: var(--gray-70);
 }
 
 hr {
@@ -782,7 +784,7 @@ hr {
   padding-inline: 5px;
   font-size: inherit;
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
-  color: var(--cyan-50);
+  color: rgb(189, 95, 95);
   cursor: pointer;
 }
 
@@ -825,6 +827,18 @@ iframe {
   min-height: 300px;
   display: grid;
   grid-template-columns: 1fr;
+}
+.modal__redirect__content::before {
+  content: "訂購成功";
+  display: inline-block;
+  z-index: 100;
+  position: absolute;
+  font-size: 19px;
+  color: var(--black);
+  opacity: 0.7;
+  letter-spacing: 0.8em;
+  inset: 45% calc(50% - 6px) auto auto;
+  transform: translateX(50%);
 }
 .modal__redirect__content img {
   width: 100%;
