@@ -20,6 +20,9 @@ function modalClose() {
 }
 
 function renderInfoDOM(data) {
+  attractionInfo.style.display = "grid";
+  attractionContainer.style.display = "flex";
+  carouselEl.style.display = "block";
   const images = data?.images;
   const attractionTitleEl = document.createElement("h3");
   attractionTitleEl.textContent = data.name;
@@ -78,31 +81,34 @@ function renderInfoDOM(data) {
   actionContainer.appendChild(prevBtn);
   actionContainer.appendChild(nextBtn);
   images.map((img, i) => {
-    const attractionEl = document.createElement("div");
+    const attractionEl = document.createElement("img");
     attractionEl.setAttribute("class", "carousel__item");
-    attractionEl.setAttribute("style", `  background-image: url(${img});`);
-    const attractionImg = document.createElement("image");
-    attractionImg.setAttribute("src", img);
-    attractionEl.appendChild(attractionImg);
+    attractionEl.setAttribute("src", img);
+    attractionEl.setAttribute("alt", "");
     const attractionRadio = document.createElement("div");
     attractionRadio.setAttribute("class", "carousel__radios__radio");
 
     if (i == "0") {
-      attractionEl.classList.add("carousel__item--visible");
-      attractionRadio.style.backgroundColor = "var(--black)";
+      attractionEl.style.opacity = 1;
+      attractionRadio.style.backgroundColor = "var(--gray-50)";
     }
 
     carouselEl.appendChild(attractionEl);
     attractionRadioContainer.appendChild(attractionRadio);
   });
   carouselEl.appendChild(attractionRadioContainer);
+  loadingEnd();
 }
 
 function renderAttractionNotFoundDOM() {
+  carouselEl.remove();
+  attractionInfo.remove();
+  attractionContainer.remove();
   const notfoundEl = document.createElement("div");
   notfoundEl.setAttribute("class", "attraction__notfound ");
   notfoundEl.textContent = "查無此景點ID";
   attractionMainEl.appendChild(notfoundEl);
+  loadingEnd();
 }
 
 async function fetchAttractionInfo() {
@@ -114,9 +120,7 @@ async function fetchAttractionInfo() {
       renderAttractionNotFoundDOM();
       return;
     }
-    attractionInfo.style.display = "grid";
-    attractionContainer.style.display = "flex";
-    carouselEl.style.display = "block";
+
     renderInfoDOM(data);
     document.querySelector(".addMap").addEventListener("click", function () {
       modalEl.showModal();
@@ -133,11 +137,11 @@ async function fetchAttractionInfo() {
         radios.forEach((radio) => {
           radio.style.backgroundColor = "var(--white)";
         });
-        for (let slide of slides) {
-          slide.classList.remove("carousel__item--visible");
+        for (const slide of slides) {
+          slide.style.opacity = 0;
         }
-        slides[i].classList.add("carousel__item--visible");
-        radios[i].style.backgroundColor = "var(--black)";
+        slides[i].style.opacity = 1;
+        radios[i].style.backgroundColor = "var(--gray-70)";
       });
     });
 
@@ -154,13 +158,13 @@ async function fetchAttractionInfo() {
 
     function updateSlidePosition() {
       for (let slide of slides) {
-        slide.classList.remove("carousel__item--visible");
+        slide.style.opacity = 0;
       }
       radios.forEach((radio) => {
         radio.style.backgroundColor = "var(--white)";
       });
-      radios[slidePosition].style.backgroundColor = "var(--black)";
-      slides[slidePosition].classList.add("carousel__item--visible");
+      radios[slidePosition].style.backgroundColor = "var(--gray-70)";
+      slides[slidePosition].style.opacity = 1;
     }
 
     function moveToNextSlide() {
@@ -205,11 +209,11 @@ fetchAttractionInfo();
 const bookingDateEl = document.querySelector("#booking_date");
 
 const dayReg = new RegExp(/\d{4}-\d{2}-\d{2}$/);
-
 document.querySelector("#booking_btn").addEventListener("click", (e) => {
   if (logoutEl.style.display !== "block") {
     alert("請先登入");
     memberElClick();
+
     return;
   }
   if (
@@ -218,6 +222,7 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
   ) {
     alert("請選擇合理的日期");
     bookingDateEl.value = "";
+
     return;
   }
 
@@ -245,13 +250,13 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
       bookingTime: bookingTime,
       price: price,
     }),
-  }).then(function (response) {
+  }).then(function () {
     redirectModel.showModal();
   });
 });
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth() + 1;
-const currentDate = new Date().getDate() + 1;
+const currentDate = new Date().getDate();
 
 bookingDateEl.setAttribute(
   "min",

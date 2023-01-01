@@ -20,11 +20,7 @@ app.config['JWT_BLACKLIST_ENABLED'] = True #黑名單管理
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']  #允许将access and refresh tokens加入黑名单
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7) 
 
-cnx= mysql.connector.connect()
-dbconfig = {'user':os.getenv("MYSQL_USER"), 'password':os.getenv("MYSQL_PW"),'database':os.getenv("MYSQL_DB")}
-cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False,host="0.0.0.0", **dbconfig)
-connection = cnxpool.get_connection()
-mycursor=connection.cursor()
+
 
 from views.view import view
 from apis.attraction import attraction

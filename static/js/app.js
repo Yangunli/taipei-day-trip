@@ -223,6 +223,7 @@ async function loginChecked() {
     },
   });
   if (response.status === 200) {
+    memberEl.style.opacity = 0;
     memberEl.style.display = "none";
     logoutEl.style.display = "block";
   }
@@ -274,4 +275,13 @@ for (const passwordTypeEye of passwordTypeEyes) {
       passwordTypeEye.textContent = "visibility";
     }
   });
+}
+
+function loadingEnd() {
+  document.querySelector(".loadingPage").style.display = "none";
+  document.querySelector("body").style.overflowY = "scroll";
+}
+
+function loadingStart() {
+  document.querySelector(".loadingPage").style.display = "flex";
 }

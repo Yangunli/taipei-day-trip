@@ -19,7 +19,7 @@ function renderAttractionDOM(attraction) {
   cardEl.setAttribute("tabindex", "0");
   cardEl.setAttribute("href", `${originUrl}/attraction/${attraction.id}`);
   cardEl.setAttribute("data-id", attraction.id);
-
+  loadingEnd();
   const cardContentEl = document.createElement("div");
   cardContentEl.setAttribute("class", "card__content");
   cardContentEl.setAttribute(
