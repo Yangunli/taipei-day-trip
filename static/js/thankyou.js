@@ -18,6 +18,7 @@ async function fetchOrderInfo() {
     document.querySelector("h3").textContent = `您的訂單號碼：${id}`;
     document.querySelector("h1").textContent =
       data.status === 1 ? "付款成功" : "付款失敗";
+    loadingEnd();
   } catch (e) {
     console.log(e);
   }

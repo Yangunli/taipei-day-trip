@@ -14,7 +14,7 @@ bcrypt = Bcrypt()
 
 cnx= mysql.connector.connect()
 dbconfig = {'user':os.getenv("MYSQL_USER"), 'password':os.getenv("MYSQL_PW"),'database':os.getenv("MYSQL_DB")}
-cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False,host="127.0.0.1", **dbconfig)
+cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30,host="0.0.0.0", **dbconfig)
 connection = cnxpool.get_connection()
 mycursor=connection.cursor()
 
@@ -36,13 +36,16 @@ def checkout__order():
 	order=request.json.get("order", None)  
 	contact_info= request.json.get("contact", None)
 	(contact_name,contact_email,contact_phone)=tuple(contact_info.values())  
+	name_regex =  re.search(r'^((?![\u3000-\u303F])[\u2E80-\uFE4F]|\·|\‧|\．)*(?![\u3000-\u303F])[\u2E80-\uFE4F](\·\．\．)*$|^[a-zA-Z\s]+$', contact_name)
+	email_regex = re.search(r'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$', contact_email)
+	phone_regex = re.search(r'^09\d{2}-?\d{3}-?\d{3}$', contact_phone)
 
 
 	frontend_data_str=""
 	for order_data in order:		
 		frontend_data_str+=order_data["trip"]["attraction"]["id"]+order_data["trip"]["date"]+order_data["trip"]["time"]
 
-	if user_id :
+	if user_id and name_regex and email_regex and phone_regex:
 		connection = cnxpool.get_connection()
 		mycursor=connection.cursor()
 		

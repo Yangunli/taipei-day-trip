@@ -17,13 +17,12 @@
 
   .carousel .carousel__radios {
     position: relative;
-    z-index: 5;
-    bottom: 16px;
+    top: calc(100% - 21.2px);
     display: flex;
     margin: auto;
     justify-content: center;
     gap: 12px;
-    transform: translateY(-50%);
+    opacity: 1;
 
     .carousel__radios__radio {
       width: 10.4px;
@@ -32,20 +31,19 @@
       border: 1px solid var(--white);
       background-color: var(--white);
       opacity: 0.8;
-      &:hover,
-      &:target {
-        background-color: var(--black);
-      }
     }
   }
 
   .carousel .carousel__item {
-    display: none;
+    position: absolute;
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center;
+    background-color: var(--gray-20);
+    opacity: 0;
+    object-fit: cover;
+    object-position: center;
     isolation: isolate;
+    transition: all 0.6s ease-in-out;
   }
 
   .carousel .carousel__item::before,
@@ -58,10 +56,6 @@
     mix-blend-mode: overlay;
   }
 
-  .carousel .carousel__item--visible {
-    display: flex;
-  }
-
   .carousel .carousel__actions {
     position: relative;
     inset: 50% 0;
@@ -69,7 +63,7 @@
     display: flex;
     justify-content: space-between;
     margin: auto;
-    background-color: black;
+    background-color: transparent;
     transform: translateY(-50%);
   }
 
@@ -80,9 +74,7 @@
     background-image: url(../images/btn_leftArrow.png);
     background-size: cover;
     border-radius: 50%;
-    border: 0;
     opacity: 0.8;
-    cursor: pointer;
   }
 
   .carousel .carousel__actions button#carousel__button--prev {
@@ -182,8 +174,6 @@
         background-color: var(--cyan-70);
         border-radius: 5px;
         color: var(--white);
-
-        --border-size: 2px;
         &::before {
           inset: 0;
           z-index: -1;
@@ -191,7 +181,7 @@
           background-color: var(--cyan-50);
           border-radius: 5px;
           content: "";
-          transition: transform 300ms ease-in-out;
+          transition: all 0.8s ease-in-out 0.2s;
           transform: scaleX(0);
           transform-origin: left;
         }
@@ -202,8 +192,8 @@
         }
         &:hover {
           z-index: 5;
-          color: var(--white);
           border-radius: 5px;
+          letter-spacing: 2px;
         }
       }
     }
@@ -299,16 +289,13 @@ hr {
   padding-inline: 5px;
   font-size: inherit;
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
-  color: rgb(189, 95, 95);
+  color: var(--cyan-50);
   cursor: pointer;
 }
 
 .modal:modal {
   margin: auto;
-  // padding: 1em;
   max-width: 50ch;
-  // border: 0;
-  // box-shadow: 0 0 1em rgb(0 0 0 / .3);
   background-color: var(--gray-20);
   border: none;
   border-radius: 10%;
@@ -339,56 +326,46 @@ iframe {
 .modal__redirect__content {
   width: min(300px, 500px);
   min-height: 300px;
-  display: grid;
-  grid-template-columns: 1fr;
-  &::before {
-    content: "訂購成功";
-    display: inline-block;
-    z-index: 100;
-    position: absolute;
-    font-size: 19px;
-    color: var(--black);
-    opacity: 0.7;
-    letter-spacing: 0.8em;
-    inset: 45% calc(50% - 6px) auto auto;
-    transform: translateX(50%);
-  }
-  img {
-    width: 100%;
-    height: 100%;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 10px;
+  background-image: url(../images/bookingsucess.webp);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
 
-  .modal__redirect__group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    place-items: center;
-    a {
-      color: var(--cyan-70);
-      text-decoration: none;
-      position: relative;
+  a {
+    position: relative;
+    writing-mode: vertical-lr;
+    text-align: center;
+    letter-spacing: 25px;
+    padding-top: 100px;
+    font-size: 20px;
+    color: var(--cyan-70);
+    mix-blend-mode: difference;
+    transition: all 0.3s ease-in-out;
+    outline: none;
 
-      &:after,
-      &::before {
-        content: "";
-        position: absolute;
-        display: block;
-        border-bottom: 1px dashed black;
-        width: 1px;
-        opacity: 0;
-        transition: width ease-in-out 0.5s;
-      }
-      &::after {
-        height: 5px;
-      }
-      &::before {
-        height: 0px;
-        top: -5px;
-      }
-      &:hover::after,
-      &:hover::before {
-        opacity: 1;
-        width: 100%;
-      }
+    &::before {
+      display: flex;
+      writing-mode: horizontal-tb;
+      position: absolute;
+      width: 2px;
+      height: 180px;
+      line-height: 45px;
+      content: attr(data-name);
+      color: var(--bluegrey);
+      transform: translateY(-200%);
+      transition: all 1s ease-in-out;
+    }
+    &:hover {
+      color: transparent;
+    }
+    &:hover::before {
+      opacity: 1;
+      transform: translateY(0%);
+      inset: 85px -2.5px;
     }
   }
 }

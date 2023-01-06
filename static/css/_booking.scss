@@ -81,10 +81,10 @@
         gap: 40px;
         padding: 20px 0px;
         figure {
-          width: 250px;
+          width: 258px;
           height: 200px;
           min-width: 200px;
-          padding-inline: 8px;
+          padding: 0px 8px;
           // overflow: hidden;
           border-radius: calc(var(--primary-border-radius) * 2);
           &:hover {
@@ -164,6 +164,7 @@
       width: min(calc(100% - 100px), 1000px);
       margin: 0 auto;
       align-items: center;
+      gap: 5px;
       label {
         height: 24px;
         display: grid;

@@ -88,6 +88,7 @@ function renderBookingInfo(data) {
   bookingAttractionAddTitle.textContent = "地址：";
   bookingAttractionAddContent.textContent = data.attraction.address;
   bookingAttracitonContainer.appendChild(bookingAttracitonItem);
+  loadingEnd();
 }
 
 async function fetchBookingInfo() {
@@ -124,6 +125,7 @@ async function fetchBookingInfo() {
       for (hr of bookingHr) {
         hr.remove();
       }
+      loadingEnd();
     }
   } catch (e) {
     console.log(e);
@@ -246,6 +248,7 @@ document
   });
 
 function onClick() {
+  loadingStart();
   const bookingInfos = document.querySelectorAll(
     ".order__booking__attraction__item"
   );
@@ -330,6 +333,7 @@ function onClick() {
         .then(function (myJson) {
           console.log(myJson);
           orderId = myJson.data.number;
+          loadingEnd();
           window.location.href = `${originUrl}/thankyou/${orderId}`;
         });
     }

@@ -10,7 +10,7 @@ bcrypt = Bcrypt()
 
 cnx= mysql.connector.connect()
 dbconfig = {'user':os.getenv("MYSQL_USER"), 'password':os.getenv("MYSQL_PW"),'database':os.getenv("MYSQL_DB")}
-cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30, pool_reset_session=False,host="127.0.0.1", **dbconfig)
+cnxpool = mysql.connector.pooling.MySQLConnectionPool( pool_name = "mypool",pool_size = 30 ,host="0.0.0.0", **dbconfig)
 connection = cnxpool.get_connection()
 mycursor=connection.cursor()
 
