@@ -20,7 +20,7 @@ async function fetchOrderInfo() {
       data.status === 1 ? "付款成功" : "付款失敗";
     loadingEnd();
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 }
 

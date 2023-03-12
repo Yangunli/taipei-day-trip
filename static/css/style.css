@@ -794,10 +794,6 @@ hr {
   margin: 0 0 0.5rem 0;
 }
 
-.modal::-webkit-backdrop {
-  background: rgba(0, 0, 0, 0.4);
-}
-
 .modal::backdrop {
   background: rgba(0, 0, 0, 0.4);
 }
@@ -830,8 +826,7 @@ iframe {
 }
 .modal__redirect__content a {
   position: relative;
-  -ms-writing-mode: tb-lr;
-      writing-mode: vertical-lr;
+  writing-mode: vertical-lr;
   text-align: center;
   letter-spacing: 25px;
   padding-top: 100px;
@@ -843,8 +838,7 @@ iframe {
 }
 .modal__redirect__content a::before {
   display: flex;
-  -ms-writing-mode: lr-tb;
-      writing-mode: horizontal-tb;
+  writing-mode: horizontal-tb;
   position: absolute;
   width: 2px;
   height: 180px;
@@ -1060,7 +1054,7 @@ iframe {
 
 @media screen and (max-width: 1000px) {
   .order .order__booking .order__booking__headline,
-.order .order__booking .order__booking__empty {
+  .order .order__booking .order__booking__empty {
     width: calc(100% - 100px);
     padding-inline: 50px;
   }
@@ -1076,8 +1070,8 @@ iframe {
     width: calc(100% - 288px);
   }
   .order__contact h2,
-.order__contact .booking__contact__info,
-.order__contact p {
+  .order__contact .booking__contact__info,
+  .order__contact p {
     width: calc(100% - 100px);
   }
 }
@@ -1093,8 +1087,8 @@ iframe {
     padding-right: 50px;
   }
   .order .order__booking .order__booking__headline,
-.order .order__booking .order__booking__attraction,
-.order .order__booking .order__booking__empty {
+  .order .order__booking .order__booking__attraction,
+  .order .order__booking .order__booking__empty {
     width: calc(100% - 50px);
     padding-inline: 25px;
   }
@@ -1109,8 +1103,8 @@ iframe {
     width: 450px;
   }
   .order__contact h2,
-.order__contact .booking__contact__info,
-.order__contact p {
+  .order__contact .booking__contact__info,
+  .order__contact p {
     width: calc(100% - 50px);
     line-height: 23px;
   }
@@ -1121,15 +1115,15 @@ iframe {
     padding-right: 20px;
   }
   .order .order__contact h2,
-.order .order__contact .booking__contact__info,
-.order .order__contact p,
-.order .order__creditcard h2,
-.order .order__creditcard .booking__contact__info,
-.order .order__creditcard p {
+  .order .order__contact .booking__contact__info,
+  .order .order__contact p,
+  .order .order__creditcard h2,
+  .order .order__creditcard .booking__contact__info,
+  .order .order__creditcard p {
     width: calc(100% - 40px);
   }
   .order .order__booking .order__booking__headline,
-.order .order__booking .order__booking__empty {
+  .order .order__booking .order__booking__empty {
     width: calc(100% - 40px);
     padding-inline: 20px;
   }
@@ -1208,7 +1202,6 @@ iframe {
   -webkit-text-stroke: 1px rgb(36, 35, 35);
   -webkit-text-fill-color: transparent;
   transition: transform 0.8s ease-in-out;
-  cursor: -webkit-grab;
   cursor: grab;
   scale: 1;
 }
@@ -1232,7 +1225,7 @@ iframe {
   --delay-character: 0.2s;
   --text-color-hover: #ff8489;
   z-index: 20;
-  position: absolute;
+  position: fixed;
   inset: 0;
   display: flex;
   justify-content: center;
@@ -1280,257 +1273,165 @@ iframe {
   display: inline-block;
   text-align: center;
   width: var(--font-size);
-  -webkit-animation: frameMove var(--duration) linear infinite;
-          animation: frameMove var(--duration) linear infinite;
+  animation: frameMove var(--duration) linear infinite;
   position: absolute;
   transition: ease all 0.3s;
 }
 .loadingPage .frame span:nth-of-type(1) {
-  -webkit-animation-delay: calc(var(--delay-character) * 1);
-          animation-delay: calc(var(--delay-character) * 1);
+  animation-delay: calc(var(--delay-character) * 1);
 }
 .loadingPage .frame span:nth-of-type(2) {
-  -webkit-animation-delay: calc(var(--delay-character) * 2);
-          animation-delay: calc(var(--delay-character) * 2);
+  animation-delay: calc(var(--delay-character) * 2);
 }
 .loadingPage .frame span:nth-of-type(3) {
-  -webkit-animation-delay: calc(var(--delay-character) * 3);
-          animation-delay: calc(var(--delay-character) * 3);
+  animation-delay: calc(var(--delay-character) * 3);
 }
 .loadingPage .frame span:nth-of-type(4) {
-  -webkit-animation-delay: calc(var(--delay-character) * 4);
-          animation-delay: calc(var(--delay-character) * 4);
+  animation-delay: calc(var(--delay-character) * 4);
 }
 .loadingPage .frame span:nth-of-type(5) {
-  -webkit-animation-delay: calc(var(--delay-character) * 5);
-          animation-delay: calc(var(--delay-character) * 5);
+  animation-delay: calc(var(--delay-character) * 5);
 }
 .loadingPage .frame span:nth-of-type(6) {
-  -webkit-animation-delay: calc(var(--delay-character) * 6);
-          animation-delay: calc(var(--delay-character) * 6);
+  animation-delay: calc(var(--delay-character) * 6);
 }
 .loadingPage .frame span:nth-of-type(7) {
-  -webkit-animation-delay: calc(var(--delay-character) * 7);
-          animation-delay: calc(var(--delay-character) * 7);
+  animation-delay: calc(var(--delay-character) * 7);
 }
 .loadingPage .frame span:nth-of-type(8) {
-  -webkit-animation-delay: calc(var(--delay-character) * 8);
-          animation-delay: calc(var(--delay-character) * 8);
+  animation-delay: calc(var(--delay-character) * 8);
 }
 .loadingPage .frame span:nth-of-type(9) {
-  -webkit-animation-delay: calc(var(--delay-character) * 9);
-          animation-delay: calc(var(--delay-character) * 9);
+  animation-delay: calc(var(--delay-character) * 9);
 }
 .loadingPage .frame span:nth-of-type(10) {
-  -webkit-animation-delay: calc(var(--delay-character) * 10);
-          animation-delay: calc(var(--delay-character) * 10);
+  animation-delay: calc(var(--delay-character) * 10);
 }
 .loadingPage .frame span:nth-of-type(11) {
-  -webkit-animation-delay: calc(var(--delay-character) * 11);
-          animation-delay: calc(var(--delay-character) * 11);
+  animation-delay: calc(var(--delay-character) * 11);
 }
 .loadingPage .frame span:nth-of-type(12) {
-  -webkit-animation-delay: calc(var(--delay-character) * 12);
-          animation-delay: calc(var(--delay-character) * 12);
+  animation-delay: calc(var(--delay-character) * 12);
 }
 .loadingPage .frame span:nth-of-type(13) {
-  -webkit-animation-delay: calc(var(--delay-character) * 13);
-          animation-delay: calc(var(--delay-character) * 13);
+  animation-delay: calc(var(--delay-character) * 13);
 }
 .loadingPage .frame span:nth-of-type(14) {
-  -webkit-animation-delay: calc(var(--delay-character) * 14);
-          animation-delay: calc(var(--delay-character) * 14);
+  animation-delay: calc(var(--delay-character) * 14);
 }
 .loadingPage .frame span:nth-of-type(15) {
-  -webkit-animation-delay: calc(var(--delay-character) * 15);
-          animation-delay: calc(var(--delay-character) * 15);
+  animation-delay: calc(var(--delay-character) * 15);
 }
 .loadingPage .frame span:nth-of-type(16) {
-  -webkit-animation-delay: calc(var(--delay-character) * 16);
-          animation-delay: calc(var(--delay-character) * 16);
+  animation-delay: calc(var(--delay-character) * 16);
 }
 .loadingPage .frame span:nth-of-type(17) {
-  -webkit-animation-delay: calc(var(--delay-character) * 17);
-          animation-delay: calc(var(--delay-character) * 17);
+  animation-delay: calc(var(--delay-character) * 17);
 }
 .loadingPage .frame span:nth-of-type(18) {
-  -webkit-animation-delay: calc(var(--delay-character) * 18);
-          animation-delay: calc(var(--delay-character) * 18);
+  animation-delay: calc(var(--delay-character) * 18);
 }
 .loadingPage .frame span:nth-of-type(19) {
-  -webkit-animation-delay: calc(var(--delay-character) * 19);
-          animation-delay: calc(var(--delay-character) * 19);
+  animation-delay: calc(var(--delay-character) * 19);
 }
 .loadingPage .frame span:nth-of-type(20) {
-  -webkit-animation-delay: calc(var(--delay-character) * 20);
-          animation-delay: calc(var(--delay-character) * 20);
+  animation-delay: calc(var(--delay-character) * 20);
 }
 .loadingPage .frame span:nth-of-type(21) {
-  -webkit-animation-delay: calc(var(--delay-character) * 21);
-          animation-delay: calc(var(--delay-character) * 21);
+  animation-delay: calc(var(--delay-character) * 21);
 }
 .loadingPage .frame span:nth-of-type(22) {
-  -webkit-animation-delay: calc(var(--delay-character) * 22);
-          animation-delay: calc(var(--delay-character) * 22);
+  animation-delay: calc(var(--delay-character) * 22);
 }
 .loadingPage .frame span:nth-of-type(23) {
-  -webkit-animation-delay: calc(var(--delay-character) * 23);
-          animation-delay: calc(var(--delay-character) * 23);
+  animation-delay: calc(var(--delay-character) * 23);
 }
 .loadingPage .frame span:nth-of-type(24) {
-  -webkit-animation-delay: calc(var(--delay-character) * 24);
-          animation-delay: calc(var(--delay-character) * 24);
+  animation-delay: calc(var(--delay-character) * 24);
 }
 .loadingPage .frame span:nth-of-type(25) {
-  -webkit-animation-delay: calc(var(--delay-character) * 25);
-          animation-delay: calc(var(--delay-character) * 25);
+  animation-delay: calc(var(--delay-character) * 25);
 }
 .loadingPage .frame span:nth-of-type(26) {
-  -webkit-animation-delay: calc(var(--delay-character) * 26);
-          animation-delay: calc(var(--delay-character) * 26);
+  animation-delay: calc(var(--delay-character) * 26);
 }
 .loadingPage .frame span:nth-of-type(27) {
-  -webkit-animation-delay: calc(var(--delay-character) * 27);
-          animation-delay: calc(var(--delay-character) * 27);
+  animation-delay: calc(var(--delay-character) * 27);
 }
 .loadingPage .frame span:nth-of-type(28) {
-  -webkit-animation-delay: calc(var(--delay-character) * 28);
-          animation-delay: calc(var(--delay-character) * 28);
+  animation-delay: calc(var(--delay-character) * 28);
 }
 .loadingPage .frame span:nth-of-type(29) {
-  -webkit-animation-delay: calc(var(--delay-character) * 29);
-          animation-delay: calc(var(--delay-character) * 29);
+  animation-delay: calc(var(--delay-character) * 29);
 }
 .loadingPage .frame span:nth-of-type(30) {
-  -webkit-animation-delay: calc(var(--delay-character) * 30);
-          animation-delay: calc(var(--delay-character) * 30);
+  animation-delay: calc(var(--delay-character) * 30);
 }
 .loadingPage .frame span:nth-of-type(31) {
-  -webkit-animation-delay: calc(var(--delay-character) * 31);
-          animation-delay: calc(var(--delay-character) * 31);
+  animation-delay: calc(var(--delay-character) * 31);
 }
 .loadingPage .frame span:nth-of-type(32) {
-  -webkit-animation-delay: calc(var(--delay-character) * 32);
-          animation-delay: calc(var(--delay-character) * 32);
+  animation-delay: calc(var(--delay-character) * 32);
 }
 .loadingPage .frame span:nth-of-type(33) {
-  -webkit-animation-delay: calc(var(--delay-character) * 33);
-          animation-delay: calc(var(--delay-character) * 33);
+  animation-delay: calc(var(--delay-character) * 33);
 }
 .loadingPage .frame span:nth-of-type(34) {
-  -webkit-animation-delay: calc(var(--delay-character) * 34);
-          animation-delay: calc(var(--delay-character) * 34);
+  animation-delay: calc(var(--delay-character) * 34);
 }
 .loadingPage .frame span:nth-of-type(35) {
-  -webkit-animation-delay: calc(var(--delay-character) * 35);
-          animation-delay: calc(var(--delay-character) * 35);
+  animation-delay: calc(var(--delay-character) * 35);
 }
 .loadingPage .frame span:nth-of-type(36) {
-  -webkit-animation-delay: calc(var(--delay-character) * 36);
-          animation-delay: calc(var(--delay-character) * 36);
+  animation-delay: calc(var(--delay-character) * 36);
 }
 .loadingPage .frame span:nth-of-type(37) {
-  -webkit-animation-delay: calc(var(--delay-character) * 37);
-          animation-delay: calc(var(--delay-character) * 37);
+  animation-delay: calc(var(--delay-character) * 37);
 }
 .loadingPage .frame span:nth-of-type(38) {
-  -webkit-animation-delay: calc(var(--delay-character) * 38);
-          animation-delay: calc(var(--delay-character) * 38);
+  animation-delay: calc(var(--delay-character) * 38);
 }
 .loadingPage .frame span:nth-of-type(39) {
-  -webkit-animation-delay: calc(var(--delay-character) * 39);
-          animation-delay: calc(var(--delay-character) * 39);
+  animation-delay: calc(var(--delay-character) * 39);
 }
 .loadingPage .frame span:nth-of-type(40) {
-  -webkit-animation-delay: calc(var(--delay-character) * 40);
-          animation-delay: calc(var(--delay-character) * 40);
+  animation-delay: calc(var(--delay-character) * 40);
 }
 .loadingPage .frame span:nth-of-type(41) {
-  -webkit-animation-delay: calc(var(--delay-character) * 41);
-          animation-delay: calc(var(--delay-character) * 41);
+  animation-delay: calc(var(--delay-character) * 41);
 }
 .loadingPage .frame span:nth-of-type(42) {
-  -webkit-animation-delay: calc(var(--delay-character) * 42);
-          animation-delay: calc(var(--delay-character) * 42);
+  animation-delay: calc(var(--delay-character) * 42);
 }
 .loadingPage .frame span:nth-of-type(43) {
-  -webkit-animation-delay: calc(var(--delay-character) * 43);
-          animation-delay: calc(var(--delay-character) * 43);
+  animation-delay: calc(var(--delay-character) * 43);
 }
 .loadingPage .frame span:nth-of-type(44) {
-  -webkit-animation-delay: calc(var(--delay-character) * 44);
-          animation-delay: calc(var(--delay-character) * 44);
+  animation-delay: calc(var(--delay-character) * 44);
 }
 .loadingPage .frame span:nth-of-type(45) {
-  -webkit-animation-delay: calc(var(--delay-character) * 45);
-          animation-delay: calc(var(--delay-character) * 45);
+  animation-delay: calc(var(--delay-character) * 45);
 }
 .loadingPage .frame span:nth-of-type(46) {
-  -webkit-animation-delay: calc(var(--delay-character) * 46);
-          animation-delay: calc(var(--delay-character) * 46);
+  animation-delay: calc(var(--delay-character) * 46);
 }
 .loadingPage .frame span:nth-of-type(47) {
-  -webkit-animation-delay: calc(var(--delay-character) * 47);
-          animation-delay: calc(var(--delay-character) * 47);
+  animation-delay: calc(var(--delay-character) * 47);
 }
 .loadingPage .frame span:nth-of-type(48) {
-  -webkit-animation-delay: calc(var(--delay-character) * 48);
-          animation-delay: calc(var(--delay-character) * 48);
+  animation-delay: calc(var(--delay-character) * 48);
 }
 .loadingPage .frame span:nth-of-type(49) {
-  -webkit-animation-delay: calc(var(--delay-character) * 49);
-          animation-delay: calc(var(--delay-character) * 49);
+  animation-delay: calc(var(--delay-character) * 49);
 }
 .loadingPage .frame span:nth-of-type(50) {
-  -webkit-animation-delay: calc(var(--delay-character) * 50);
-          animation-delay: calc(var(--delay-character) * 50);
+  animation-delay: calc(var(--delay-character) * 50);
 }
 .loadingPage .frame span:nth-of-type(51) {
-  -webkit-animation-delay: calc(var(--delay-character) * 51);
-          animation-delay: calc(var(--delay-character) * 51);
+  animation-delay: calc(var(--delay-character) * 51);
 }
 .loadingPage .frame span:nth-of-type(52) {
-  -webkit-animation-delay: calc(var(--delay-character) * 52);
-          animation-delay: calc(var(--delay-character) * 52);
-}
-@-webkit-keyframes frameMove {
-  0% {
-    top: 0;
-    left: 0;
-    transform: rotate(0deg);
-  }
-  24% {
-    top: 0;
-    left: 100%;
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(90deg);
-  }
-  49% {
-    top: 100%;
-    left: 100%;
-    transform: rotate(90deg);
-  }
-  50% {
-    transform: rotate(180deg);
-  }
-  74% {
-    top: 100%;
-    left: 0%;
-    transform: rotate(180deg);
-  }
-  75% {
-    transform: rotate(270deg);
-  }
-  99% {
-    top: 0%;
-    left: 0%;
-    transform: rotate(270deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  animation-delay: calc(var(--delay-character) * 52);
 }
 @keyframes frameMove {
   0% {
