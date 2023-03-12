@@ -339,7 +339,7 @@ footer {
   --delay-character: 0.2s;
   --text-color-hover: #ff8489;
   z-index: 20;
-  position: absolute;
+  position: fixed;
   inset: 0;
   display: flex;
   justify-content: center;

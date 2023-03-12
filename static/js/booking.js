@@ -106,6 +106,7 @@ async function fetchBookingInfo() {
   try {
     if (data) {
       let totalValue = 0;
+      console.log(data);
       data.map((booking) => {
         renderBookingInfo(booking);
         totalValue += booking.price;
@@ -128,7 +129,7 @@ async function fetchBookingInfo() {
       loadingEnd();
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 }
 
@@ -248,7 +249,6 @@ document
   });
 
 function onClick() {
-  loadingStart();
   const bookingInfos = document.querySelectorAll(
     ".order__booking__attraction__item"
   );
@@ -294,7 +294,6 @@ function onClick() {
   const totalPrice = document
     .querySelector("#order__checkout__value")
     .textContent.match(priceReg)[0];
-  console.log(nameMatchChecked, emailMatchChecked, phoneMatchChecked);
 
   TPDirect.card.getPrime(function (result) {
     if (
@@ -306,7 +305,7 @@ function onClick() {
       alert("是不是有哪裡沒有輸入");
       return;
     }
-
+    loadingStart();
     const prime = result.card.prime;
     if (nameMatchChecked && emailMatchChecked && phoneMatchChecked) {
       fetch(`${originUrl}/api/orders`, {
@@ -331,7 +330,6 @@ function onClick() {
           return response.json();
         })
         .then(function (myJson) {
-          console.log(myJson);
           orderId = myJson.data.number;
           loadingEnd();
           window.location.href = `${originUrl}/thankyou/${orderId}`;

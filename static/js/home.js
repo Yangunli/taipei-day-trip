@@ -131,7 +131,6 @@ function showLoading() {
 window.addEventListener("scroll", () => {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
-  // console.log({ scrollTop, scrollHeight, clientHeight });
   if (clientHeight + scrollTop >= scrollHeight - 5) {
     // show the loading animation or not
 
@@ -155,11 +154,3 @@ const debounce = (fn, delay = 200) => {
     }, delay);
   };
 };
-
-// 进行函数防抖
-let debounced = debounce(function () {
-  console.log("debounce");
-});
-
-// 监听resize事件
-window.addEventListener("resize", debounced);

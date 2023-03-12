@@ -97,7 +97,7 @@ function renderInfoDOM(data) {
     attractionRadioContainer.appendChild(attractionRadio);
   });
   carouselEl.appendChild(attractionRadioContainer);
-  loadingEnd();
+  preloadImage(images);
 }
 
 function renderAttractionNotFoundDOM() {
@@ -187,7 +187,7 @@ async function fetchAttractionInfo() {
       updateSlidePosition();
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 }
 
@@ -255,12 +255,16 @@ document.querySelector("#booking_btn").addEventListener("click", (e) => {
   });
 });
 const currentYear = new Date().getFullYear();
-const currentMonth = new Date().getMonth() + 1;
-const currentDate = new Date().getDate();
+const currentMonth =
+  (new Date().getMonth() + 1) % 12 >= 10
+    ? new Date().getMonth()
+    : `0${(new Date().getMonth() + 1) % 12}`;
+const currentDate =
+  new Date().getDate() >= 10
+    ? new Date().getDate()
+    : `0${new Date().getDate()}`;
 
 bookingDateEl.setAttribute(
   "min",
   `${currentYear}-${currentMonth}-${currentDate}`
 );
-
-// console.log(new Date().toLocaleString("en-CA-u-hc-h24").replace(",", ""));
